@@ -463,7 +463,7 @@ Growth
       - #link("references/registration presentation.pdf")[Presentation I gave on pose graph registration]
       - #link("references/registration presentation bonus.pdf")[Ideas related to the above presentation]
       - #link("https://robotics.caltech.edu/~jerma/research_papers/scan_matching_papers/milios_globally_consistent.pdf")[Lu and Milios paper] #text(gray, size: 12pt)["Globally Consistent Range Scan Alignment for Environment Mapping", April 1997. Introduces these ideas in the context of robotics]
-      - #link("https://robotics.caltech.edu/~jerma/research_papers/scan_matching_papers/milios_globally_consistent.pdf")[Borrmann et al. paper] #text(gray, size: 12pt)["The Efficient Extension of Globally Consistent Scan Matching to 6 DoF", June 2008. Extends concepts in the above paper to 3D. We aren't using this paper's ideas, but it helped me understand what was going on better]
+      - #link("https://robotik.informatik.uni-wuerzburg.de/telematics/download/3dpvt2008.pdf")[Borrmann et al. paper] #text(gray, size: 12pt)["The Efficient Extension of Globally Consistent Scan Matching to 6 DoF", June 2008. Extends concepts in the above paper to 3D. We aren't using this paper's ideas, but it helped me understand what was going on better]
     ],
     [
       *Laser spot modeling*
