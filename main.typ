@@ -14,7 +14,7 @@
     institution: []
   )
 )
-// #show link: it => underline(text(blue, it.body))
+
 #show link: set text(blue)
 #show link: underline
 #show image: set align(center)
@@ -337,7 +337,6 @@ Growth
   - Track beam divergence.
 */
 
-// TODO: get visuals from Lawrence of "banding". Just get a scan from hafb.
 #align(center)[
   #set text(size: 18pt)
   Analyzing `20230627_095732_cuchillo1_scan00091.bpf`
@@ -406,14 +405,7 @@ Growth
   gutter: 1em
 ))
 ---
-// Show an example report. ~/Downloads/leidos_report/aux/processing_report.pdf
 #image("aux/vulcan_mapping_top.png", height: 80%)
-// #align(center)[
-//   #link("aux/processing_report.pdf")[Single target report]
-
-//   #link("aux/processing_report_mapping.pdf")[Vulcan mapping run report]
-// ]
-//
 ---
 #place(horizon+center, dy: 20pt, image("aux/scans-overview.png", height: 88%))
 ---
@@ -495,23 +487,3 @@ Growth
     inset: .1em
   )
 ]
-
-
-/*
-Describe what it is
-
-Compare to the sensor performance report
-
-Show an example
-
-What I learned, data stuff, code architecure, how does it work. 
-*/
-
-
-/*
-Have a good beginning and good end. Spend more time on processing report, but keep it at the end.
-
-Registration was more or less exploratory. Became a lot more important when we wanted to implement rotations. The lie stuff came out of it. Impact! Discuss impact!
-
-Also, where is the result, where is the code? Link all info here. 
-*/
