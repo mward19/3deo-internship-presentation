@@ -114,7 +114,6 @@ Straightforward to move one scan to align with another, less so to move $n$ scan
 ---
 #let reg-slide(path) = {
   place(center + horizon, dy: 8%, image(path, height: 95%))
-  place(center + top, dy: 13%, text(gray, size: 20pt)[Easy to align 2 scans, hard to align 3])
 }
 #reg-slide("aux/pairwise registration-2.png")
 ---
@@ -178,6 +177,7 @@ Pose graph optimization.
 #align(center)[#image("aux/springs.png", height: 55%)]
 
 // Hardest part is setting covariances
+#pause
 
 #show-ls-eq
 ---
@@ -300,7 +300,10 @@ $
 Pruning and weighting.
 
 #grid(
-  image("aux/error_z_all.png", height: 75%),
+  [
+    #image("aux/error_z_all.png", height: 65%)
+    #place(center + top, dx: -14pt, dy: -2pt, text(size: 14pt)[Comparing pairwise and global registrations])
+  ],
   [
     - After optimization, some springs (pairwise registrations) are stretched
     - Lots of redundancy in the graph reveals poor pairwise registrations
@@ -396,7 +399,7 @@ Growth
     A consise, readable .pdf report summarizing key insights from processing.
 
     #set text(size: 18pt)
-    Located in #text(gray)[`<acadia-output-directory>/`]`qc/processing_report`
+    Located in #text(gray)[`<acadia-output-directory>/`]`qc/processing_report` after processing is complete
   ],
   image("aux/thumbnail-report.png", height: 100%),
   image("aux/thumbnail-report-mapping.png", height: 100%),
