@@ -1,6 +1,7 @@
 #import "theme_3deo.typ": *
 
 #let hr = align(center, line(length: 100%, stroke: gray))
+#let arrow = rotate(math.arrow.long, 90deg)
 
 #show: three-deo-theme.with(
   aspect-ratio: "16-9",
@@ -89,14 +90,7 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
 // Future:
 
 
-== Internship overview
-Acadia-related work, no hardware yet.
-
-Primarily point cloud registration and processing performance report, plenty more though.
-
-#pause
-
----
+== Introduction
 #align(center + horizon)[#block(width: 60%)[
   *A few goals to discuss.*
   #set align(left)
@@ -110,125 +104,6 @@ Primarily point cloud registration and processing performance report, plenty mor
   #v(2em)
 ]]
 
-// #let placeGoal1 = place(top + right, dy: -1em, text(gray)[Infer global registrations from pairwise registrations])
-// #let placeGoal2 = place(top + right, dy: -1em, text(gray)[Model laser spot illumination as a Gaussian from sensor data])
-// #let placeGoal3 = place(top + right, dy: -1em, text(gray)[Generate a processing performance report])
-
-// #focus-slide[
-//   Format for what follows
-//   #align(center)[#block(width: 80%)[
-//     #set text(size: 24pt)
-//     #grid(
-//       [- Goal],      text(gray)[solve a problem, develop a module, etc.],
-//       [- Approach],  text(gray)[what I did to achieve the goal],
-//       [- Knowledge], text(gray)[new knowledge and skills],
-//       [- Growth],    text(gray)[personal growth],
-//       columns: 2,
-//       row-gutter: 16pt,
-//       column-gutter: 1em,
-//       align: (left, left)
-//     )
-//   ]]
-// ]
-
-// #let goal-bullet(name, desc) = {
-//   grid(
-//     [*#name*], desc,
-//     columns: (20%, auto),
-//     align: top + left,
-//     row-gutter: 40pt,
-//     column-gutter: 1em
-//   )
-// }
-// == Global registration
-
-// /*
-// Inferring global registrations. How to concisely explain global from pairwise registration? 
-
-// Approach
-// - pose graph optimization
-// - modeling covariances
-// - optuna hyperparameter search
-// */
-
-// #goal-bullet()[Goal][
-//   Infer global registrations from pairwise registrations.
-
-//   #pause
-
-//   Straightforward to move one scan to align with another, less so to move $n$ scans to align with each other.
-
-//   #pause
-
-//   #align(center)[
-//     #image("aux/graph-3-4.png", height: 40%)
-
-//     Unfortunately, $macron(D)_13 != macron(D)_12 macron(D)_23.$
-//   ]
-// ]
-
-// #meanwhile 
-
-// ---
-
-
-// #goal-bullet()[Approach][
-//   Pose graph optimization.
-
-//   #align(center)[
-//     #image("aux/springs.png", height: 55%)
-  
-//     $
-//       limits("minimize")_({X_1, ..., X_n}) quad &sum_(i, j) lr((macron(D)_(i j) - (X_i - X_j)), size:#120%)^T 
-//       C_(i j)^(-1) 
-//       lr((macron(D)_(i j) - (X_i - X_j)), size:#120%)
-//     $
-//   ]
-// ]
-
-// // Did a lot to try to determine the covariances, the stretchinesses.
-// ---
-
-// #goal-bullet()[Approach (cont.)][
-//   Successful. Faster than existing methods, extensible to 6 DoF.
-
-//   #pause
-
-//   #align(center, text(size: 15pt)[_Barrett Park, pairwise registrations from `20250527_ncc`_])
-//   #show image: set align(center)
-//   #grid(
-//     [
-//       #image("aux/lu_milios_optimal_136.png") 
-//       #align(center)[#text(size: 16pt)[Pose graph, constant covariance]]
-//     ],  
-//     [
-//       #image("aux/nxn_optimal.png")
-//       #align(center)[#text(size: 16pt)[Jacob Lawrence's `ncc_nxn.py`]]
-//     ],
-//     columns: (50%, 50%),
-//     rows: (55%)
-//   )
-//   #v(2em)
-// ]
-
-
-
-// #pagebreak()
-// #goal-bullet()[Knowledge][
-//   - TODO
-//   - TODO
-// ]
-
-// #goal-bullet()[Growth][
-//   - Let go
-// ]
-
-// #meanwhile 
-
-
-// == Spot illumination modeling
-// #goal-bullet()[Goal][Model laser spot illumination as a Gaussian from sensor data.]
-
 == Global registration from pairwise registration
 
 #pause
@@ -236,13 +111,63 @@ Primarily point cloud registration and processing performance report, plenty mor
 
 Straightforward to move one scan to align with another, less so to move $n$ scans to align with each other.
 
-#align(center)[
-  #image("aux/graph-3-4.png", height: 40%)
+---
+#let just-image(path) = {
+  place(center + horizon, dy: 8%, image(path, height: 95%))
+}
+#just-image("aux/pairwise registration-2.png")
+---
+#just-image("aux/pairwise registration-3.png")
+---
+#just-image("aux/pairwise registration-4.png")
+---
+#just-image("aux/pairwise registration-5.png")
+---
+#just-image("aux/pairwise registration-6.png")
+---
+#just-image("aux/pairwise registration-7.png")
+---
+#just-image("aux/pairwise registration-8.png")
+---
 
-  Unfortunately, $macron(D)_13 != macron(D)_12 macron(D)_23.$
-]
+Straightforward to move one scan to align with another, less so to move $n$ scans to align with each other.
+
+#v(2em)
+
+#align(center, grid(
+  image("aux/graph-3-4.png", height: 40%),
+  [
+    #pause
+    // $X_i = (x_i, y_i, z_i, theta_i, phi_i, psi_i) in RR^6$ is a scan position
+
+    // $macron(D)_(i j): RR^6 arrow RR^6$ transforms points from scan $j$'s frame to scan $i$'s frame
+    
+    // #v(1em)
+
+    Unfortunately, $macron(D)_13 != macron(D)_12 macron(D)_23.$
+  ],
+  columns: (30%, auto),
+  align: left + horizon,
+  column-gutter: 2em
+))
 
 ---
+#let show-ls-eq = place(
+  bottom + center,
+  $
+    limits("minimize")_({X_1, ..., X_n}) quad &sum_(i, j) lr((macron(D)_(i j) - (X_i - X_j)), size:#120%)^T 
+    C_(i j)^(-1) 
+    lr((macron(D)_(i j) - (X_i - X_j)), size:#120%)
+  $
+)
+#let show-ls-eq-cancel = place(
+  bottom + center,
+  $
+    cancel(limits("minimize")_({X_1, ..., X_n}) quad &sum_(i, j) lr((macron(D)_(i j) - (X_i - X_j)), size:#120%)^T 
+    C_(i j)^(-1) 
+    lr((macron(D)_(i j) - (X_i - X_j)), size:#120%))
+  $
+)
 
 // Approach
 Pose graph optimization.
@@ -253,11 +178,7 @@ Pose graph optimization.
 
 // Hardest part is setting covariances
 
-$
-  limits("minimize")_({X_1, ..., X_n}) quad &sum_(i, j) lr((macron(D)_(i j) - (X_i - X_j)), size:#120%)^T 
-  C_(i j)^(-1) 
-  lr((macron(D)_(i j) - (X_i - X_j)), size:#120%)
-$
+#show-ls-eq
 ---
 
 Pose graph optimization.
@@ -276,11 +197,102 @@ Pose graph optimization.
   inset: (x: 1em)
 )
 
+#show-ls-eq
+
+---
+// Problem is, angles are not linear and euclidean and friendly.
+#show-ls-eq
+
+#pause #place(center + horizon, grid(
+  [
+    #set text(size: 45pt)
+    
+    #image("aux/3d_axes.png", height: 60%)
+  ],
+  [
+    #set text(size: 45pt)
+    #image("aux/euler_rot.png", height: 50%)
+  ],
+  columns: (50%, 50%),
+  align: center + horizon
+))
+#meanwhile $
+X_i = vec(x_i, y_i, z_i, theta_i, phi_i, psi_i) in RR^6
 $
-  limits("minimize")_({X_1, ..., X_n}) quad &sum_(i, j) lr((macron(D)_(i j) - (X_i - X_j)), size:#120%)^T 
-  C_(i j)^(-1) 
-  lr((macron(D)_(i j) - (X_i - X_j)), size:#120%)
+---
+#show-ls-eq
+
+#place(center + horizon, grid(
+  [
+    #set text(size: 45pt)
+    #place(center + horizon, dx: 110pt, dy: 100pt, emoji.checkmark.box)
+    
+    #image("aux/3d_axes.png", height: 60%)
+  ],
+  [
+    #set text(size: 45pt)
+    #image("aux/euler_rot.png", height: 50%)
+
+  #place(center + horizon, dx: 110pt, dy: 100pt, emoji.crossmark)
+  ],
+  columns: (50%, 50%),
+  align: center + horizon
+))
 $
+X_i = vec(x_i, y_i, z_i, theta_i, phi_i, psi_i) in RR^6
+$
+
+// ---
+// #place(center + horizon, grid(
+//   [
+//     #set text(size: 45pt)
+//     #place(center + horizon, dx: 110pt, dy: 100pt, emoji.checkmark.box)
+    
+//     #image("aux/3d_axes.png", height: 60%)
+//   ],
+//   [
+//     #set text(size: 45pt)
+//     #image("aux/euler_rot.png", height: 50%)
+
+//   #place(center + horizon, dx: 110pt, dy: 100pt, emoji.crossmark)
+//   ],
+//   columns: (50%, 50%),
+//   align: center + horizon
+// ))
+// $
+// X_i = vec(x_i, y_i, z_i, theta_i, phi_i, psi_i) in RR^6
+// $
+
+// ---
+
+// Pose graph optimization.
+
+
+// #block()[
+//   #set text(size: 16pt)
+//   #grid(
+//     image("aux/springs.png", height: 50%),
+//     grid(
+//       [$S E (3)$], text(gray)[space of transformation matrices. 6-dimensional],
+//       arrow, [],
+//       [$frak(s) frak(e) (3)$], text(gray)[associated Lie algebra. Perform optimization in this space],
+//       arrow, [],
+//       [$S E (3)$], [],
+//       columns: (20%, auto),
+//       align: (center + horizon, left + horizon),
+//       column-gutter: 1em,
+//       row-gutter: 1em,
+//       inset: (x: 1em)
+//     ),
+//     columns: (40%, 60%),
+//     align: center + horizon
+//   )
+// ]
+
+
+// #image("image.png", height: 25%)
+
+
 
 ---
 
@@ -427,7 +439,6 @@ Growth
 ---
 
 #align(center + horizon)[
-  #let arrow = rotate(math.arrow.long, 90deg)
   Processing directory \
   #text(gray, size: 14pt)[say, `albert:/shares/processed/cuchillo/flightData/FlatCreek`]
   

@@ -9,7 +9,7 @@
     right + top,
     dx: -4pt,
     dy: 4pt,
-    image("Logo_classic_trim.png", height: 1.5em)
+    image("aux/Logo_classic_trim.png", height: 1.5em)
   )
   place(
     top,
@@ -124,7 +124,7 @@
       center + top,
       dx: -4pt,
       dy: 20pt,
-      image("Logo_classic_trim.png", height: 2em)
+      image("aux/Logo_classic_trim.png", height: 2em)
     )
     block(
       width: 100%,
