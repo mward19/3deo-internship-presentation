@@ -81,7 +81,7 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
 == Introduction
 - BYU Applied and Computational Math (DS & ML, April 2026)
 - Biophysics Simulation Group---computer vision and competition dataset curation
-- Music
+- Music 
 - Handball
 - Data engineer intern with you until August 16#super[th]!
 
@@ -112,22 +112,23 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
 Straightforward to move one scan to align with another, less so to move $n$ scans to align with each other.
 
 ---
-#let just-image(path) = {
+#let reg-slide(path) = {
   place(center + horizon, dy: 8%, image(path, height: 95%))
+  place(center + top, dy: 13%, text(gray, size: 20pt)[Easy to align 2 scans, hard to align 3])
 }
-#just-image("aux/pairwise registration-2.png")
+#reg-slide("aux/pairwise registration-2.png")
 ---
-#just-image("aux/pairwise registration-3.png")
+#reg-slide("aux/pairwise registration-3.png")
 ---
-#just-image("aux/pairwise registration-4.png")
+#reg-slide("aux/pairwise registration-4.png")
 ---
-#just-image("aux/pairwise registration-5.png")
+#reg-slide("aux/pairwise registration-5.png")
 ---
-#just-image("aux/pairwise registration-6.png")
+#reg-slide("aux/pairwise registration-6.png")
 ---
-#just-image("aux/pairwise registration-7.png")
+#reg-slide("aux/pairwise registration-7.png")
 ---
-#just-image("aux/pairwise registration-8.png")
+#reg-slide("aux/pairwise registration-8.png")
 ---
 
 Straightforward to move one scan to align with another, less so to move $n$ scans to align with each other.
@@ -239,7 +240,7 @@ $
   align: center + horizon
 ))
 $
-X_i = vec(x_i, y_i, z_i, theta_i, phi_i, psi_i) in RR^6
+X_i = vec(x_i, y_i, z_i, theta_i, phi.alt_i, psi_i) in RR^6
 $
 
 // ---
@@ -303,7 +304,7 @@ Pruning and weighting.
   [
     - After optimization, some springs (pairwise registrations) are stretched
     - Lots of redundancy in the graph reveals poor pairwise registrations
-    - Weight those springs less or remove
+    - Weight those springs less in optimization step or remove them
   ],
   columns: (50%, 50%),
   align: (center + horizon, left + horizon),
@@ -364,12 +365,15 @@ Growth
     // It moves back and forth with each swipe
     - #link("aux/hitmap_moving_average_window_30.mp4")[30 frame moving average pixel hitmap]
     // Modeling with GMMs doesn't work because the data is truncated
+    #pause
     - #link("aux/spot_movement_window_100_gaussians_1.mp4")[Model with Gaussian Mixture Model (1 component)]
     // GMMis works great
+    #pause
     - #link("aux/spot_movement_window_100_gaussians_1_new_gmmis_1_in_1.mp4")[Model with GMMis]
+    #pause
     - #link("aux/spot_movement_window_100_gaussians_1_gmmis_1_in_100.mp4")[Model with GMMis, keep only 1% of detections] // Useful for integrating in the processing chain. 
   ]
-  #hr
+  #meanwhile #hr
 
   // How many frames are we averaging? How am I averaging? Why am I averaging the way I am? Modeling frame by frame or what, or is it filtering?
   
@@ -390,10 +394,10 @@ Growth
 
     #pause
 
-    A consise, readable aux/.pdf report summarizing key insights from processing.
+    A consise, readable .pdf report summarizing key insights from processing.
 
     #set text(size: 18pt)
-    Located in #text(gray)[`acadia-output-directory/`]`qc/processing_report`
+    Located in #text(gray)[`<acadia-output-directory>/`]`qc/processing_report`
   ],
   image("aux/thumbnail-report.png", height: 100%),
   image("aux/thumbnail-report-mapping.png", height: 100%),
@@ -452,10 +456,45 @@ Growth
   #LaTeX report
   #arrow
 
-  aux/.pdf report
+  .pdf report
 ]
 
----
+== References
+#block()[
+  #set text(size: 18pt)
+  #grid(
+    [
+      *Global from pairwise registration*
+    ], 
+    [
+      - #link("https://bitbucket.org/3deo/zreg_ncc/src/master/python/")[zreg_ncc/python (master) on Bitbucket]
+      - #link("references/registration presentation.pdf")[Presentation I gave on pose graph registration]
+      - #link("references/registration presentation bonus.pdf")[Ideas related to the above presentation]
+      - #link("https://robotics.caltech.edu/~jerma/research_papers/scan_matching_papers/milios_globally_consistent.pdf")[Lu and Milios paper] #text(gray, size: 12pt)["Globally Consistent Range Scan Alignment for Environment Mapping", April 1997. Introduces these ideas in the context of robotics]
+      - #link("https://robotics.caltech.edu/~jerma/research_papers/scan_matching_papers/milios_globally_consistent.pdf")[Borrmann et al. paper] #text(gray, size: 12pt)["The Efficient Extension of Globally Consistent Scan Matching to 6 DoF", June 2008. Extends concepts in the above paper to 3D. We aren't using this paper's ideas, but it helped me understand what was going on better]
+    ],
+    [
+      *Laser spot modeling*
+    ],
+    [
+      - #link("references/illumination_spot_modeling.pdf")[Write-up] #text(gray, size: 12pt)[Describes background and my work thus far on this]
+      - I have the git repo, but the code is unfinished, so I haven't pushed to Bitbucket. Should I push?
+    ],
+    [
+      *Processing performance report*
+    ],
+    [
+      - #link("https://bitbucket.org/3deo/processing-performance/src/master/")[processing-performance (master) on Bitbucket]
+      - #link("https://bitbucket.org/3deo/acadia/src/master/")[acadia (master) on Bitbucket] #text(gray, size: 12pt)[Apptainers in apptainer_creation and slurm bricks in processing_workflow]
+      - #link("https://bitbucket.org/3deo/python_3deo/src/master/fileIO/readGSOF.py")[python_3deo/fileIO/readGSOF.py] #text(gray, size: 12pt)[Used to collect certain scanning information]
+    ],
+    columns: (40%, auto),
+    align: (left + top, left + horizon),
+    column-gutter: 1em,
+    row-gutter: 1.5em,
+    inset: .1em
+  )
+]
 
 
 /*
