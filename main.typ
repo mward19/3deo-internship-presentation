@@ -116,19 +116,27 @@ We have ways to move one scan to align with another, with some uncertainty. How 
 #let reg-slide(path) = {
   place(center + horizon, dy: 8%, image(path, height: 95%))
 }
-#reg-slide("aux/pairwise registration-2.png")
+#reg-slide("aux/pairwise registration_annotated-2.png")
 ---
-#reg-slide("aux/pairwise registration-3.png")
+#reg-slide("aux/pairwise registration_annotated-3.png")
 ---
-#reg-slide("aux/pairwise registration-4.png")
+#reg-slide("aux/pairwise registration_annotated-4.png")
 ---
-#reg-slide("aux/pairwise registration-5.png")
+#reg-slide("aux/pairwise registration_annotated-5.png")
 ---
-#reg-slide("aux/pairwise registration-6.png")
+#reg-slide("aux/pairwise registration_annotated-6.png")
 ---
-#reg-slide("aux/pairwise registration-7.png")
+#reg-slide("aux/pairwise registration_annotated-7.png")
 ---
-#reg-slide("aux/pairwise registration-8.png")
+#reg-slide("aux/pairwise registration_annotated-8.png")
+---
+#reg-slide("aux/pairwise registration_annotated-9.png")
+---
+#reg-slide("aux/pairwise registration_annotated-10.png")
+---
+#reg-slide("aux/pairwise registration_annotated-11.png")
+---
+#reg-slide("aux/pairwise registration_annotated-4.png")
 ---
 
 We have ways to move one scan to align with another, with some uncertainty. How can we move $n$ scans to align with each other?
