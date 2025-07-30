@@ -110,13 +110,15 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
 // Goal
 
 // We can usually calculate how to move one scan to align with another (pairwise registration). How can we move $n$ scans to align with each other (global registration)?
-We have ways to move one scan to align with another, with some uncertainty. How can we move $n$ scans to align with each other?
-
----
 #let reg-slide(path) = {
   place(center + horizon, dy: 8%, image(path, height: 95%))
 }
 #reg-slide("aux/pairwise registration_annotated-2.png")
+#place(
+  dx: 75%,
+  dy: 20%,
+  rect(fill: white, height: 200pt, width: 100pt)[]
+)
 ---
 #reg-slide("aux/pairwise registration_annotated-3.png")
 ---
@@ -210,6 +212,25 @@ Pose graph optimization.
 #show-ls-eq
 
 ---
+
+Pruning and weighting.
+
+#grid(
+  [
+    #image("aux/error_z_all.png", height: 65%)
+    #place(center + top, dx: -14pt, dy: -2pt, text(size: 14pt)[Comparing pairwise and global registrations])
+  ],
+  [
+    - After optimization, some springs (pairwise registrations) are stretched
+    - Lots of redundancy in the graph reveals poor pairwise registrations
+    - Weight those springs less in optimization step or remove them
+  ],
+  columns: (50%, 50%),
+  align: (center + horizon, left + horizon),
+  column-gutter: 1em,
+  inset: (x: 1em)
+)
+---
 // Problem is, angles are not linear and euclidean and friendly.
 #show-ls-eq
 
@@ -252,77 +273,21 @@ $
 X_i = vec(x_i, y_i, z_i, theta_i, phi.alt_i, psi_i) in RR^6
 $
 
-// ---
-// #place(center + horizon, grid(
-//   [
-//     #set text(size: 45pt)
-//     #place(center + horizon, dx: 110pt, dy: 100pt, emoji.checkmark.box)
-    
-//     #image("aux/3d_axes.png", height: 60%)
-//   ],
-//   [
-//     #set text(size: 45pt)
-//     #image("aux/euler_rot.png", height: 50%)
+---
+#let lawrence-reg-pres = {
+  set text(size: 12pt)
+  link("https://docs.google.com/presentation/d/1ylhLGAtZd3n0Wg0YLUSWutFb2xv_mUaj/edit?usp=sharing&ouid=117651070160453801114&rtpof=true&sd=true")[Jacob Lawrence's presentation on July 18]
+}
 
-//   #place(center + horizon, dx: 110pt, dy: 100pt, emoji.crossmark)
-//   ],
-//   columns: (50%, 50%),
-//   align: center + horizon
-// ))
-// $
-// X_i = vec(x_i, y_i, z_i, theta_i, phi_i, psi_i) in RR^6
-// $
-
-// ---
-
-// Pose graph optimization.
-
-
-// #block()[
-//   #set text(size: 16pt)
-//   #grid(
-//     image("aux/springs.png", height: 50%),
-//     grid(
-//       [$S E (3)$], text(gray)[space of transformation matrices. 6-dimensional],
-//       arrow, [],
-//       [$frak(s) frak(e) (3)$], text(gray)[associated Lie algebra. Perform optimization in this space],
-//       arrow, [],
-//       [$S E (3)$], [],
-//       columns: (20%, auto),
-//       align: (center + horizon, left + horizon),
-//       column-gutter: 1em,
-//       row-gutter: 1em,
-//       inset: (x: 1em)
-//     ),
-//     columns: (40%, 60%),
-//     align: center + horizon
-//   )
-// ]
-
-
-// #image("image.png", height: 25%)
-
-
+#place(center + horizon, dy: 8%, image("aux/add_rotation.png", height: 80%))
+#align(center)[Results (linear least squares)]
+#place(center+bottom, lawrence-reg-pres)
 
 ---
+#place(center + horizon, dy: 8%, image("aux/add_rotation_2.png", height: 80%))
+#align(center)[Results (linear least squares)]
+#place(center+bottom, lawrence-reg-pres)
 
-Pruning and weighting.
-
-#grid(
-  [
-    #image("aux/error_z_all.png", height: 65%)
-    #place(center + top, dx: -14pt, dy: -2pt, text(size: 14pt)[Comparing pairwise and global registrations])
-  ],
-  [
-    - After optimization, some springs (pairwise registrations) are stretched
-    - Lots of redundancy in the graph reveals poor pairwise registrations
-    - Weight those springs less in optimization step or remove them
-  ],
-  columns: (50%, 50%),
-  align: (center + horizon, left + horizon),
-  column-gutter: 1em,
-  inset: (x: 1em)
-)
 
 
 // We have found success applying constant covariances. As long as most of the springs are right, the bad registrations will get "tight" and we can remove them. We can prune, we can downweight. Iterative least squares. Add a bit about this. IRLS, iteratively reweighted least squares. Trying to not let model skew. 
@@ -349,13 +314,13 @@ Growth
   - Track beam divergence.
 */
 
+#place(horizon + center, dy: 6%, image("aux/spot.png", height: 95%))
+---
 #align(center)[
   #set text(size: 18pt)
   Analyzing `20230627_095732_cuchillo1_scan00091.bpf`
 ]
 #place(horizon + center, dy: 7%, image("aux/scan91_z.png", height: 80%))
----
-#place(horizon + center, dy: 6%, image("aux/spot.png", height: 95%))
 ---
 #place(horizon + center, dy: 6%, dx: 0%, image("aux/avg_hitmap.png", height: 95%))
 #align(left)[
@@ -363,8 +328,9 @@ Growth
   Total *photon detections per pixel* during \
 `20230627_095732_cuchillo1_scan00091.bpf`
 ]
+#pause
+#place(center + bottom, dx: -38pt, image("aux/normal.png", height: 25%))
 ---
-
 #align(center)[
   #set text(size: 18pt)
   Analyzing `20230627_095732_cuchillo1_scan00091.bpf`
@@ -378,8 +344,36 @@ Growth
     // Modeling with GMMs doesn't work because the data is truncated
     #pause
     - #link("aux/spot_movement_window_100_gaussians_1.mp4")[Model with Gaussian Mixture Model (1 component)]
+  ]
+  #meanwhile #hr
+
+  // How many frames are we averaging? How am I averaging? Why am I averaging the way I am? Modeling frame by frame or what, or is it filtering?
+  
+  #place(bottom + center, dy: -10%)[#image("aux/avg_hitmap_pixels_only.png", height: 25%)]
+]
+---
+#align(center + horizon, image("aux/all_samples_raw.svg"))
+---
+#align(center + horizon, image("aux/all_samples.svg"))
+---
+#align(center + horizon, image("aux/all_samples_boxed_raw.svg"))
+---
+#align(center + horizon, image("aux/all_samples_boxed.svg"))
+---
+
+#align(center)[
+  #set text(size: 18pt)
+  Analyzing `20230627_095732_cuchillo1_scan00091.bpf`
+]
+
+#align(center)[
+  #block()[
+    #set align(left)
+    // It moves back and forth with each swipe
+    - #link("aux/hitmap_moving_average_window_30.mp4")[30 frame moving average pixel hitmap]
+    // Modeling with GMMs doesn't work because the data is truncated
+    - #link("aux/spot_movement_window_100_gaussians_1.mp4")[Model with Gaussian Mixture Model (1 component)]
     // GMMis works great
-    #pause
     - #link("aux/spot_movement_window_100_gaussians_1_new_gmmis_1_in_1.mp4")[Model with GMMis]
     #pause
     - #link("aux/spot_movement_window_100_gaussians_1_gmmis_1_in_100.mp4")[Model with GMMis, keep only 1% of detections] // Useful for integrating in the processing chain. 

@@ -332,7 +332,7 @@
   ..args,
   body,
 ) = {
-  set text(font: "Calibri", weight: "medium", size: 10pt)
+  set text(font: "Calibri", weight: "bold", size: 10pt)
   sidebar = utils.merge-dicts(
     (width: 10em, filled: false, numbered: false, indent: .5em, short-heading: true),
     sidebar,
