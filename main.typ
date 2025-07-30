@@ -109,7 +109,8 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
 #pause
 // Goal
 
-Straightforward to move one scan to align with another, less so to move $n$ scans to align with each other.
+// We can usually calculate how to move one scan to align with another (pairwise registration). How can we move $n$ scans to align with each other (global registration)?
+We have ways to move one scan to align with another, with some uncertainty. How can we move $n$ scans to align with each other?
 
 ---
 #let reg-slide(path) = {
@@ -130,7 +131,7 @@ Straightforward to move one scan to align with another, less so to move $n$ scan
 #reg-slide("aux/pairwise registration-8.png")
 ---
 
-Straightforward to move one scan to align with another, less so to move $n$ scans to align with each other.
+We have ways to move one scan to align with another, with some uncertainty. How can we move $n$ scans to align with each other?
 
 #v(2em)
 
