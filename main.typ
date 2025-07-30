@@ -20,7 +20,7 @@
 #show image: set align(center)
 
 #let TeX = {
-  set text(font: "New Computer Modern",)
+  set text(font: "New Computer Modern", weight: "medium")
   let t = "T"
   let e = text(baseline: 0.22em, "E")
   let x = "X"
@@ -28,7 +28,7 @@
 }
 
 #let LaTeX = {
-  set text(font: "New Computer Modern")
+  set text(font: "New Computer Modern", weight: "medium")
   let l = "L"
   let a = text(baseline: -0.35em, size: 0.66em, "A")
   box(l + h(-0.32em) + a + h(-0.13em) + TeX)
@@ -81,8 +81,6 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
 == Introduction
 - BYU Applied and Computational Math (DS & ML, April 2026)
 - Biophysics Simulation Group---computer vision and competition dataset curation
-- Music 
-- Handball
 - Data engineer intern with you until August 16#super[th]!
 
 // #pause
@@ -90,56 +88,168 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
 // Future:
 
 
-== Introduction
+== Overview of projects
 #align(center + horizon)[#block(width: 60%)[
-  *A few goals to discuss.*
   #set align(left)
   #set par(leading: 8pt, spacing: 16pt)
-  1. Infer global registrations from pairwise registrations
-  
-  2. Model laser spot illumination as a Gaussian from sensor data
 
-  3. Generate a processing performance report
+  1. Generate a processing performance report
+
+  2. Infer global registrations from pairwise registrations
+  
+  3. Model laser spot illumination as a Gaussian from sensor data
 
   #v(2em)
 ]]
 
-== Global registration from pairwise registration
+#focus-slide()[Processing Performance Report]
 
-#pause
-// Goal
+== Processing Performance Report
+#place(horizon+center, grid(
+  [
+    Not to be confused with sensor performance report!
 
-// We can usually calculate how to move one scan to align with another (pairwise registration). How can we move $n$ scans to align with each other (global registration)?
-#let reg-slide(path) = {
-  place(center + horizon, dy: 8%, image(path, height: 95%))
+    #pause
+
+    A consise, readable PDF report summarizing key insights from processing.
+
+    #text(size: 18pt)[
+      Located in #text(gray)[`<acadia-output-directory>/`]`qc/processing_report` after processing is complete
+    ]
+  ],
+  image("aux/thumbnail-report.png", height: 100%),
+  columns: (75%, 10%),
+  align: horizon + left,
+  gutter: 1em
+))
+---
+#place(horizon+center, grid(
+  [
+    #align(center)[Report Format]
+    #let clarification(input) = text(gray, size: 16pt, input)
+
+    - #text(red)[Overview] (information about all tiles together)
+    - #text(blue)[Tile 1] (information specific to this tile)
+    - #text(blue)[Tile 2]
+    - $dots.v$
+    - #text(blue)[Tile $n$]
+  ],
+  image("aux/thumbnail-report.png", height: 100%),
+  columns: (75%, 10%),
+  align: horizon + left,
+  gutter: 1em
+))
+#let brace(color) = {
+  set text(weight: "thin", font: "Libertinus Serif", fill: color)
+  [{]
 }
-#reg-slide("aux/pairwise registration_annotated-2.png")
-#place(
-  dx: 75%,
-  dy: 20%,
-  rect(fill: white, height: 200pt, width: 100pt)[]
-)
----
-#reg-slide("aux/pairwise registration_annotated-3.png")
----
-#reg-slide("aux/pairwise registration_annotated-4.png")
----
-#reg-slide("aux/pairwise registration_annotated-5.png")
----
-#reg-slide("aux/pairwise registration_annotated-6.png")
----
-#reg-slide("aux/pairwise registration_annotated-7.png")
----
-#reg-slide("aux/pairwise registration_annotated-8.png")
----
-#reg-slide("aux/pairwise registration_annotated-9.png")
----
-#reg-slide("aux/pairwise registration_annotated-10.png")
----
-#reg-slide("aux/pairwise registration_annotated-11.png")
----
-#reg-slide("aux/pairwise registration_annotated-4.png")
----
+#place(bottom + right, dx: -17%, dy: -58%, scale(x: 300%, y: 800%, brace(red)))
+#place(bottom + right, dx: -17%, dy: -22%, scale(x: 300%, y: 450%, brace(blue)))
+#place(bottom + right, dx: -16.5%, dy: -3%, scale(150%, text(blue)[$dots.v$]))
+
+== Processing Report Generation Process
+#align(center + horizon)[
+  Processing directory \
+  #text(gray, size: 14pt)[say, `albert:/shares/processed/cuchillo/flightData/FlatCreek`]
+  
+  #arrow 
+  
+  .json of filepaths and statistics \
+  #text(gray, size: 14pt)[to be used in report]
+  
+  #arrow
+  
+  #LaTeX report
+  #arrow
+
+  PDF report
+]
+
+== Links to example reports
+#align(center + horizon, grid(
+  [
+    #link("aux/processing_report.pdf")[Single target report] \
+    #image("aux/thumbnail-report.png", height: 70%)
+  ],
+  [
+    #link("aux/processing_report_mapping.pdf")[Mapping report] \
+    #image("aux/thumbnail-report-mapping.png", height: 70%)
+  ],
+  columns: (40%, 40%),
+  align: (center, center)
+))
+
+== Overview
+#align(horizon, grid(
+  [
+    #let clarification(input) = {
+      h(1em)
+      text(gray, size: 16pt, input)
+    }
+    - Processing summary \
+      #clarification()[How long processing took, CPU time, etc.]
+    - Scan summary \
+      #clarification()[Number of detections, how long scanning took, etc.]
+  ],
+  [
+    #image("aux/hafb-view.png", height: 60%)
+  ],
+  columns: (50%, 50%),
+  align: (left+horizon, center+horizon)
+))
+
+== Processing Summary
+#place(horizon+center, dy: 16pt, image("aux/processing-example.png", height: 88%))
+== Processing Timeline
+#place(horizon+center, dy: 16pt, image("aux/processing-timeline.png", height: 60%))
+
+== Per Tile Sections
+#align(horizon, grid(
+  [
+    #let clarification(input) = {
+      h(1em)
+      text(gray, size: 16pt, input)
+    }
+    - Picture of the tile
+    - Scan information \
+      #clarification()[Number of detections, how long scanning took, etc.]
+    - Rejected data \ 
+      #clarification()[Reasons for rejection]
+    - Registration information \ 
+      #clarification()[To evaluate success of registration]
+  ],
+  [
+    #image("aux/hafb-view.png", height: 60%)
+  ],
+  columns: (50%, 50%),
+  align: (left+horizon, center+horizon)
+))
+
+
+
+// ---
+// #place(horizon+center, dy: 16pt, dx: 0%, image("aux/hafb-view.png", height: 80%))
+// #place(horizon+center, dy: 0pt, dx: 23%, image("aux/hafb-page.png", height: 100%))
+// #block(width: 30%, inset: 1em)[
+//   - 
+// ]
+
+#focus-slide()[Pose Graphs for Registration]
+== Ghosting
+#align(horizon+center, {
+  grid(
+  [Good registration], image("aux/roof_nxn.png", height: 90%),
+  [Bad registration \ #text(gray, size: 14pt)[notice that the roof is doubled here]], image("aux/roof_model.png", height: 90%),
+  rows: (43%, 43%),
+  columns: (auto, 50%),
+  align: (right, left)
+)})
+
+== Scan Poses
+#place(center + horizon, dy: 8%, image("aux/pairwise registration_annotated-4.png", height: 95%))
+#place(center + horizon, dx: 105pt, dy: -120pt, text(size: 22pt, weight: "medium")[Starting Poses])
+
+== Pose Graph
 
 We have ways to move one scan to align with another, with some uncertainty. How can we move $n$ scans to align with each other?
 
@@ -148,21 +258,14 @@ We have ways to move one scan to align with another, with some uncertainty. How 
 #align(center, grid(
   image("aux/graph-3-4.png", height: 40%),
   [
-    #pause
-    // $X_i = (x_i, y_i, z_i, theta_i, phi_i, psi_i) in RR^6$ is a scan position
-
-    // $macron(D)_(i j): RR^6 arrow RR^6$ transforms points from scan $j$'s frame to scan $i$'s frame
-    
-    // #v(1em)
-
-    Unfortunately, $macron(D)_13 != macron(D)_12 macron(D)_23.$
+    In practice, $macron(D)_13 != macron(D)_12 macron(D)_23.$
   ],
   columns: (30%, auto),
   align: left + horizon,
   column-gutter: 2em
 ))
 
----
+== Pose Graph as Springs
 #let show-ls-eq = place(
   bottom + center,
   $
@@ -197,28 +300,31 @@ Pose graph optimization.
 
 
 #grid(
-  image("aux/springs.png", height: 55%),
+  image("aux/springs.png", height: 50%),
   [
-    - Constant stretchiness // this works pretty well, and even to the present it's what we're using
-    - Model stretchiness manually. $(i, j) -> C_(i j)^(-1)$ // not so good
-    - Model stretchiness with machine learning (Optuna) // promising but incomplete and probably not necessary
+    #align(center)[Setting Spring Elasticities (covariances)]
+    #set text(size: 24pt)
+    - Constant elasticity // this works pretty well, and even to the present it's what we're using
+    - Model elasticity using pairwise features \
+      $(i, j) -> C_(i j)^(-1)$ // not so good
   ],
-  columns: (50%, 50%),
-  align: (center + horizon, left + horizon),
-  column-gutter: 1em,
-  inset: (x: 1em)
+  columns: (40%, 60%),
+  align: (right + horizon, left + horizon),
+  column-gutter: 1em
 )
 
 #show-ls-eq
 
----
-
-Pruning and weighting.
-
+== Rooting out Bad Pairwise Registrations
+#v(1em)
 #grid(
   [
     #image("aux/error_z_all.png", height: 65%)
-    #place(center + top, dx: -14pt, dy: -2pt, text(size: 14pt)[Comparing pairwise and global registrations])
+    #place(center + top, dx: -14pt, dy: -8pt, text(size: 18pt)[Comparing pairwise and global registrations])
+    #place(left + top, dx: -1%, dy: 6%, rect(fill: white, height: 200pt))
+    #place(left + bottom, dx: -1%, dy: 0%, rect(fill: white, width: 250pt, height: 40pt))
+    #place(left + top, dx: 94%, dy: 6%, rect(fill: white, height: 200pt))
+    #place(right + horizon, dx: 65pt, dy: -10pt, rotate(90deg, text(size: 18pt)[Z axis difference (m)]))
   ],
   [
     - After optimization, some springs (pairwise registrations) are stretched
@@ -230,30 +336,24 @@ Pruning and weighting.
   column-gutter: 1em,
   inset: (x: 1em)
 )
+
+== Results
+#let lawrence-reg-pres = {
+  set text(size: 12pt)
+  link("https://docs.google.com/presentation/d/1ylhLGAtZd3n0Wg0YLUSWutFb2xv_mUaj/edit?usp=sharing&ouid=117651070160453801114&rtpof=true&sd=true")[Jacob Lawrence's presentation on July 18]
+}
+#place(center + horizon, dy: 8%, image("aux/add_rotation.png", height: 80%))
+#place(center+bottom, lawrence-reg-pres)
+
 ---
+#place(center + horizon, dy: 8%, image("aux/add_rotation_2.png", height: 80%))
+#place(center+bottom, lawrence-reg-pres)
+
+== Ongoing and Future Work
 // Problem is, angles are not linear and euclidean and friendly.
 #show-ls-eq
 
 #pause #place(center + horizon, grid(
-  [
-    #set text(size: 45pt)
-    
-    #image("aux/3d_axes.png", height: 60%)
-  ],
-  [
-    #set text(size: 45pt)
-    #image("aux/euler_rot.png", height: 50%)
-  ],
-  columns: (50%, 50%),
-  align: center + horizon
-))
-#meanwhile $
-X_i = vec(x_i, y_i, z_i, theta_i, phi_i, psi_i) in RR^6
-$
----
-#show-ls-eq
-
-#place(center + horizon, grid(
   [
     #set text(size: 45pt)
     #place(center + horizon, dx: 110pt, dy: 100pt, emoji.checkmark.box)
@@ -269,26 +369,13 @@ $
   columns: (50%, 50%),
   align: center + horizon
 ))
-$
+#meanwhile $
 X_i = vec(x_i, y_i, z_i, theta_i, phi.alt_i, psi_i) in RR^6
 $
 
 ---
-#let lawrence-reg-pres = {
-  set text(size: 12pt)
-  link("https://docs.google.com/presentation/d/1ylhLGAtZd3n0Wg0YLUSWutFb2xv_mUaj/edit?usp=sharing&ouid=117651070160453801114&rtpof=true&sd=true")[Jacob Lawrence's presentation on July 18]
-}
-
-#place(center + horizon, dy: 8%, image("aux/add_rotation.png", height: 80%))
-#align(center)[Results (linear least squares)]
-#place(center+bottom, lawrence-reg-pres)
-
----
-#place(center + horizon, dy: 8%, image("aux/add_rotation_2.png", height: 80%))
-#align(center)[Results (linear least squares)]
-#place(center+bottom, lawrence-reg-pres)
-
-
+- Use non-linear least squares optimization to handle orientation
+- 
 
 // We have found success applying constant covariances. As long as most of the springs are right, the bad registrations will get "tight" and we can remove them. We can prune, we can downweight. Iterative least squares. Add a bit about this. IRLS, iteratively reweighted least squares. Trying to not let model skew. 
 
@@ -302,7 +389,7 @@ Growth
 - Patience to read a dense paper and understand it deeply enough to apply it to a new context
 - Patience to work through challenging questions when there isn't a "teacher" available to give me the answers
 */
-
+#focus-slide()[Modeling the Laser Illumination Spot]
 == Spot modeling
 
 // Story behind spot modeling. Tracking and modeling the laser spot during scanning. Useful to analyze reflectivity. If we can track the spot, we can track how much light we probed a certain area with and get a good reflectivity estimate. Can be used for validation of proper alignment. Emphasize it was an exploration. Success! Could be useful for a few things. Good for QC, refine tx rx alignment. Lots of auto QC possibilities. A new way to look at the data. 
@@ -315,147 +402,68 @@ Growth
 */
 
 #place(horizon + center, dy: 6%, image("aux/spot.png", height: 95%))
----
-#align(center)[
-  #set text(size: 18pt)
-  Analyzing `20230627_095732_cuchillo1_scan00091.bpf`
-]
-#place(horizon + center, dy: 7%, image("aux/scan91_z.png", height: 80%))
----
+// ---
+// #align(center)[
+//   #set text(size: 18pt)
+//   Analyzing `20230627_095732_cuchillo1_scan00091.bpf`
+// ]
+// #place(horizon + center, dy: 7%, image("aux/scan91_z.png", height: 80%))
+== Spot is Approximately Gaussian
 #place(horizon + center, dy: 6%, dx: 0%, image("aux/avg_hitmap.png", height: 95%))
 #align(left)[
   #set text(size: 22pt)
   Total *photon detections per pixel* during \
 `20230627_095732_cuchillo1_scan00091.bpf`
 ]
-#pause
 #place(center + bottom, dx: -38pt, image("aux/normal.png", height: 25%))
----
-#align(center)[
-  #set text(size: 18pt)
-  Analyzing `20230627_095732_cuchillo1_scan00091.bpf`
-]
 
-#align(center)[
-  #block()[
-    #set align(left)
-    // It moves back and forth with each swipe
-    - #link("aux/hitmap_moving_average_window_30.mp4")[30 frame moving average pixel hitmap]
-    // Modeling with GMMs doesn't work because the data is truncated
-    #pause
-    - #link("aux/spot_movement_window_100_gaussians_1.mp4")[Model with Gaussian Mixture Model (1 component)]
-  ]
-  #meanwhile #hr
+== Cannot Assume the Spot Stays Still
+#place(center + horizon, link("aux/hitmap_moving_average_window_100.mp4", image("aux/thumb1.png", height:40%)))
 
-  // How many frames are we averaging? How am I averaging? Why am I averaging the way I am? Modeling frame by frame or what, or is it filtering?
-  
-  #place(bottom + center, dy: -10%)[#image("aux/avg_hitmap_pixels_only.png", height: 25%)]
-]
----
-#align(center + horizon, image("aux/all_samples_raw.svg"))
----
-#align(center + horizon, image("aux/all_samples.svg"))
----
-#align(center + horizon, image("aux/all_samples_boxed_raw.svg"))
----
-#align(center + horizon, image("aux/all_samples_boxed.svg"))
----
 
-#align(center)[
-  #set text(size: 18pt)
-  Analyzing `20230627_095732_cuchillo1_scan00091.bpf`
-]
+== Cannot Use Sample Mean and Covariance
+#place(left + horizon, image("aux/all_samples_raw.svg"))
+#place(right + horizon, block(width: 40%)[
+  #set align(left)
+  - 100 random Gaussian samples representing photons
+  - Ring represents 1 standard deviation
+])
+== Cannot Use Sample Mean and Covariance
+#place(left + horizon, image("aux/all_samples.svg"))
+#place(right + horizon, block(width: 40%)[
+  #set align(left)
+  We can fit a Gaussian by taking sample mean and covariance
+])
+== Cannot Use Sample Mean and Covariance
+#place(left + horizon, image("aux/all_samples_boxed_raw.svg"))
+#place(right + top, block(width: 40%)[
+  #v(150pt)
+  #set align(left)
+  - In practice, we only see the samples within a frame
+])
+== Cannot Use Sample Mean and Covariance
+#place(left + horizon, image("aux/all_samples_boxed.svg"))
+#place(right + top, block(width: 40%)[
+  #v(150pt)
+  #set align(left)
+  - In practice, we only see the samples within a frame
+  - Fitting Gaussian with sample mean and covariance doesn't work
+])
 
-#align(center)[
-  #block()[
-    #set align(left)
-    // It moves back and forth with each swipe
-    - #link("aux/hitmap_moving_average_window_30.mp4")[30 frame moving average pixel hitmap]
-    // Modeling with GMMs doesn't work because the data is truncated
-    - #link("aux/spot_movement_window_100_gaussians_1.mp4")[Model with Gaussian Mixture Model (1 component)]
-    // GMMis works great
-    - #link("aux/spot_movement_window_100_gaussians_1_new_gmmis_1_in_1.mp4")[Model with GMMis]
-    #pause
-    - #link("aux/spot_movement_window_100_gaussians_1_gmmis_1_in_100.mp4")[Model with GMMis, keep only 1% of detections] // Useful for integrating in the processing chain. 
-  ]
-  #meanwhile #hr
+== Approach
+- Fit a new Gaussian to each 100-frame pixel hitmap average (no filtering)
+- Fit Gaussians with `pygmmis`
+  #text(size: 22pt)[- Written by Princeton astronomers to model luminosity of galaxies from truncated camera data (like ours)]
+  #text(size: 22pt)[- Gaussian Mixture Models (GMMs) that can handle occluded data]
+  #text(size: 22pt)[- Under the hood, Expectation Maximization (standard for GMMs), but also generates mock samples to handle occluded regions]
 
-  // How many frames are we averaging? How am I averaging? Why am I averaging the way I am? Modeling frame by frame or what, or is it filtering?
-  
-  #place(bottom + center, dy: -10%)[#image("aux/avg_hitmap_pixels_only.png", height: 25%)]
-]
+#place(bottom + center, image("aux/pygmmis.png", height: 43%))
 
-// Lots of fun. Got to try many approaches. Successfully applied GMMs and time series skills to this fun problem. Can be used to get a better pointwise density feature.
+== Successful Fit
+#place(center + horizon, link("aux/spot_movement_window_100_gaussians_1_new_gmmis_1_in_1.mp4", image("aux/thumb1.png", height:40%)))
 
----
+== Potential Applications
 
-// Talk about PyMC forum. Growth. Learning to ask questions. What I was trying to do wasn't implemented. Even pointed me to the relevant pull request.
-#align(center + horizon)[#image("aux/forum-pymc.png", height: 80%)]
-
-== Processing performance report
-#place(horizon+center, grid(
-  [
-    Not to be confused with sensor performance report!
-
-    #pause
-
-    A consise, readable .pdf report summarizing key insights from processing.
-
-    #set text(size: 18pt)
-    Located in #text(gray)[`<acadia-output-directory>/`]`qc/processing_report` after processing is complete
-  ],
-  image("aux/thumbnail-report.png", height: 100%),
-  image("aux/thumbnail-report-mapping.png", height: 100%),
-  columns: (60%, 10%, 10%),
-  align: horizon + left,
-  gutter: 1em
-))
----
-#image("aux/vulcan_mapping_top.png", height: 80%)
----
-#place(horizon+center, dy: 20pt, image("aux/scans-overview.png", height: 88%))
----
-#place(horizon+center, dy: 16pt, image("aux/processing-example.png", height: 88%))
----
-#place(horizon+center, dy: 16pt, image("aux/processing-timeline.png", height: 60%))
----
-#place(horizon+center, dy: 16pt, dx: 0%, image("aux/hafb-view.png", height: 80%))
----
-#place(horizon+center, dy: 16pt, dx: 0%, image("aux/hafb-view.png", height: 80%))
-#place(horizon+center, dy: 0pt, dx: 23%, image("aux/hafb-page.png", height: 100%))
----
-#place(horizon+center, image("aux/rejections.png", height: 30%))
----
-#align(center + horizon, grid(
-  [
-    #link("aux/processing_report.pdf")[Single target report] \
-    #image("aux/thumbnail-report.png", height: 70%)
-  ],
-  [
-    #link("aux/processing_report_mapping.pdf")[Mapping report] \
-    #image("aux/thumbnail-report-mapping.png", height: 70%)
-  ],
-  columns: (40%, 40%),
-  align: (center, center)
-))
----
-
-#align(center + horizon)[
-  Processing directory \
-  #text(gray, size: 14pt)[say, `albert:/shares/processed/cuchillo/flightData/FlatCreek`]
-  
-  #arrow 
-  
-  .json of filepaths and statistics \
-  #text(gray, size: 14pt)[to be used in report]
-  
-  #arrow
-  
-  #LaTeX report
-  #arrow
-
-  .pdf report
-]
 
 == References
 #block()[
