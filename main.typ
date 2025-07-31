@@ -117,7 +117,7 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
 
     #pause
 
-    A consise, readable PDF report summarizing key insights from processing.
+    A PDF report summarizing key insights from processing.
 
     #text(size: 18pt)[
       Located in #text(gray)[`<acadia-output-directory>/`]`qc/processing_report` after processing is complete
@@ -138,7 +138,7 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
     - #text(red)[Overview] (information about all tiles together)
     - #text(blue)[Tile 1] (information specific to this tile)
     - #text(blue)[Tile 2]
-    - $dots.v$
+    - #text(blue)[#math.dots.v]
     - #text(blue)[Tile $n$]
   ],
   image("aux/thumbnail-report.png", height: 100%),
@@ -154,7 +154,7 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
 #place(bottom + right, dx: -17%, dy: -89%, scale(x: 300%, y: 400%, brace(olive)))
 #place(bottom + right, dx: -17%, dy: -58%, scale(x: 300%, y: 800%, brace(red)))
 #place(bottom + right, dx: -17%, dy: -22%, scale(x: 300%, y: 450%, brace(blue)))
-#place(bottom + right, dx: -16.5%, dy: -3%, scale(150%, text(blue)[$dots.v$]))
+#place(bottom + right, dx: -16%, dy: -3%, scale(100%, text(blue)[#math.dots.v]))
 
 == Processing Report Generation Process
 #align(center + horizon)[
@@ -244,6 +244,7 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
   - Scan density information
   - Report on more data rejection reasons
   - Registration success metrics
+  - Warnings---for example, warn if the beam was dumping
 - Get client feedback---what do they want to see in the report?
 - Get #LaTeX compilation container smaller
 
@@ -370,7 +371,7 @@ We have ways to move one scan to align with another, with some uncertainty. How 
       (constant covariance of $"diag"(1, 1, 1, 0.002^2, 0.002^2, 0.002^2)$)
     - Prune edges (pairwise registrations) whose optimized Mahalanobis distance has z-score higher than 1.5 among all edges
   #pause
-  - Note: Improper to perform linear least squares on Euler angles, but works alright with small angle approximation
+  - Note: Improper to perform linear least squares on Euler angles, but works alright since angles are very small (no more than a few mrad)
 ]
 == Results from Lu-Milios Implementation
 
