@@ -79,9 +79,15 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
 */
 
 == Introduction
-- BYU Applied and Computational Math (DS & ML, April 2026)
-- Biophysics Simulation Group---computer vision and competition dataset curation
-- Data engineer intern with you until August 16#super[th]!
+#align(center + horizon, grid(
+  [- BYU Applied and Computational Math (DS & ML, April 2026)], image("aux/acme.jpg", height: 20%),
+  [- Biophysics Simulation Group---computer vision and competition dataset curation], image("aux/byu-kaggle-logo.png", height: 20%),
+  [- Data engineer intern with you until August 16#super[th]!], image("aux/Logo_classic_trim.png", height: 20%),
+  columns: (auto, 30%),
+  align: (left + horizon, center + horizon),
+  row-gutter: 1em
+))
+
 
 // #pause
 // #v(2em)
@@ -95,7 +101,7 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
 
   1. Generate a processing performance report
 
-  2. Infer global registrations from pairwise registrations
+  2. Improve registration pipeline with pose graph optimization
   
   3. Model laser spot illumination as a Gaussian from sensor data
 
@@ -284,7 +290,6 @@ We have ways to move one scan to align with another, with some uncertainty. How 
 )
 
 // Approach
-Pose graph optimization.
 
 // This is what I spent my first couple weeks learning about. Reading papers. Lots of statistics things.
 
@@ -296,19 +301,19 @@ Pose graph optimization.
 #show-ls-eq
 ---
 
-Pose graph optimization.
-
 
 #grid(
-  image("aux/springs.png", height: 50%),
+  image("aux/springs.png"),
   [
-    #align(center)[Setting Spring Elasticities (covariances)]
+    #align(center)[Ways to Set Spring Elasticities (covariances)]
     #set text(size: 24pt)
+
     - Constant elasticity // this works pretty well, and even to the present it's what we're using
     - Model elasticity using pairwise features \
       $(i, j) -> C_(i j)^(-1)$ // not so good
   ],
-  columns: (40%, 60%),
+  columns: (35%, 65%),
+  rows: (60%),
   align: (right + horizon, left + horizon),
   column-gutter: 1em
 )
@@ -324,12 +329,12 @@ Pose graph optimization.
     #place(left + top, dx: -1%, dy: 6%, rect(fill: white, height: 200pt))
     #place(left + bottom, dx: -1%, dy: 0%, rect(fill: white, width: 250pt, height: 40pt))
     #place(left + top, dx: 94%, dy: 6%, rect(fill: white, height: 200pt))
-    #place(right + horizon, dx: 65pt, dy: -10pt, rotate(90deg, text(size: 18pt)[Z axis difference (m)]))
+    #place(right + horizon, dx: 65pt, dy: -10pt, rotate(90deg, text(weight: "medium", size: 18pt)[Z axis difference (m)]))
   ],
   [
     - After optimization, some springs (pairwise registrations) are stretched
     - Lots of redundancy in the graph reveals poor pairwise registrations
-    - Weight those springs less in optimization step or remove them
+    - Weight those springs less in optimization step or remove them entirely
   ],
   columns: (50%, 50%),
   align: (center + horizon, left + horizon),
@@ -337,17 +342,25 @@ Pose graph optimization.
   inset: (x: 1em)
 )
 
-== Results
+== Lu-Milios Implementation
 #let lawrence-reg-pres = {
   set text(size: 12pt)
   link("https://docs.google.com/presentation/d/1ylhLGAtZd3n0Wg0YLUSWutFb2xv_mUaj/edit?usp=sharing&ouid=117651070160453801114&rtpof=true&sd=true")[Jacob Lawrence's presentation on July 18]
 }
-#place(center + horizon, dy: 8%, image("aux/add_rotation.png", height: 80%))
-#place(center+bottom, lawrence-reg-pres)
+#block()[
+  #set list(spacing: 32pt)
+  - Implemented closed-form pose graph optimizer as described in Lu and Milios' 1997 paper in full generality 
+  #pause
+  - Parameters:
+    - Expected translational error of 1 meter, 2 mrad \
+      (constant covariance of $"diag"(1, 1, 1, 0.002^2, 0.002^2, 0.002^2)$)
+    - Prune edges (pairwise registrations) whose optimized Mahalanobis distance has z-score higher than 1.5 among all edges
+  #pause
+  - Note: Improper to perform linear least squares on Euler angles, but works alright with small angle approximation
+]
+== Results from Lu-Milios Implementation
 
----
-#place(center + horizon, dy: 8%, image("aux/add_rotation_2.png", height: 80%))
-#place(center+bottom, lawrence-reg-pres)
+
 
 == Ongoing and Future Work
 // Problem is, angles are not linear and euclidean and friendly.
@@ -374,8 +387,9 @@ X_i = vec(x_i, y_i, z_i, theta_i, phi.alt_i, psi_i) in RR^6
 $
 
 ---
-- Use non-linear least squares optimization to handle orientation
-- 
+- Use non-linear least squares optimization to better handle orientation
+- [#h(1em) lie algebra graph results #h(1em)]
+- Determine if it is possible to 
 
 // We have found success applying constant covariances. As long as most of the springs are right, the bad registrations will get "tight" and we can remove them. We can prune, we can downweight. Iterative least squares. Add a bit about this. IRLS, iteratively reweighted least squares. Trying to not let model skew. 
 
@@ -390,7 +404,7 @@ Growth
 - Patience to work through challenging questions when there isn't a "teacher" available to give me the answers
 */
 #focus-slide()[Modeling the Laser Illumination Spot]
-== Spot modeling
+== Laser Illumination Spot
 
 // Story behind spot modeling. Tracking and modeling the laser spot during scanning. Useful to analyze reflectivity. If we can track the spot, we can track how much light we probed a certain area with and get a good reflectivity estimate. Can be used for validation of proper alignment. Emphasize it was an exploration. Success! Could be useful for a few things. Good for QC, refine tx rx alignment. Lots of auto QC possibilities. A new way to look at the data. 
 /*
@@ -422,77 +436,90 @@ Growth
 
 
 == Cannot Use Sample Mean and Covariance
-#place(left + horizon, image("aux/all_samples_raw.svg"))
-#place(right + horizon, block(width: 40%)[
-  #set align(left)
-  - 100 random Gaussian samples representing photons
-  - Ring represents 1 standard deviation
-])
-== Cannot Use Sample Mean and Covariance
-#place(left + horizon, image("aux/all_samples.svg"))
-#place(right + horizon, block(width: 40%)[
-  #set align(left)
-  We can fit a Gaussian by taking sample mean and covariance
-])
-== Cannot Use Sample Mean and Covariance
 #place(left + horizon, image("aux/all_samples_boxed_raw.svg"))
 #place(right + top, block(width: 40%)[
-  #v(150pt)
+  #v(60pt)
   #set align(left)
-  - In practice, we only see the samples within a frame
+  - 100 random Gaussian samples representing photons, not all of which are in-frame
+  - Ring represents 1 standard deviation
+  - We only see the samples within the frame
 ])
 == Cannot Use Sample Mean and Covariance
 #place(left + horizon, image("aux/all_samples_boxed.svg"))
 #place(right + top, block(width: 40%)[
-  #v(150pt)
+  #v(60pt)
   #set align(left)
-  - In practice, we only see the samples within a frame
+  - 100 random Gaussian samples representing photons, not all of which are in-frame
+  - Ring represents 1 standard deviation
+  - We only see the samples within the frame
   - Fitting Gaussian with sample mean and covariance doesn't work
 ])
 
 == Approach
-- Fit a new Gaussian to each 100-frame pixel hitmap average (no filtering)
-- Fit Gaussians with `pygmmis`
-  #text(size: 22pt)[- Written by Princeton astronomers to model luminosity of galaxies from truncated camera data (like ours)]
-  #text(size: 22pt)[- Gaussian Mixture Models (GMMs) that can handle occluded data]
-  #text(size: 22pt)[- Under the hood, Expectation Maximization (standard for GMMs), but also generates mock samples to handle occluded regions]
+#block()[
+  // #set par(leading: 8pt)
+  // #set list(spacing: 16pt)
+  Fit a new Gaussian to each 100-frame pixel hitmap average (no filtering) with `pygmmis` #v(-0.6em)
+  #par[]
+  #set text(size: 24pt)
+  - Written by Princeton astronomers to model luminosity of galaxies from truncated camera data (like ours)
+  - Gaussian Mixture Models (GMMs) that can handle occluded data
+  - Under the hood, uses Expectation Maximization (standard for GMMs), but also generates mock samples to handle occluded regions
+]
 
-#place(bottom + center, image("aux/pygmmis.png", height: 43%))
+
+
 
 == Successful Fit
-#place(center + horizon, link("aux/spot_movement_window_100_gaussians_1_new_gmmis_1_in_1.mp4", image("aux/thumb1.png", height:40%)))
+#place(center + horizon, link("aux/spot_movement_window_100_gaussians_1_new_gmmis_1_in_1.mp4", image("aux/thumb1.png", height:60%)))
 
 == Potential Applications
+- Automatic quality control---non-invasive way to check alignment in-flight without a particular scan pattern
+- Generate better pointwise reflectivity estimates
+- Track pixels exhibiting unusual behavior in real time
 
+== Future Work
+- Continue investigating faster alternatives, using `pygmmis` as ground truth
+
+  - Blur pixel heatmap to quickly track spot center without having to recalculate covariance
+
+  - Fit to some subset of the data---random subset works surprisingly well
+
+- Test on more scans
+
+- Use to create an improved reflectivity estimate
+  
 
 == References
 #block()[
   #set text(size: 18pt)
+  #set list(spacing: 12pt)
+  #set par(leading: 10pt)
   #grid(
     [
-      *Global from pairwise registration*
-    ], 
-    [
-      - #link("https://bitbucket.org/3deo/zreg_ncc/src/master/python/")[zreg_ncc/python (master) on Bitbucket]
-      - #link("references/registration presentation.pdf")[Presentation I gave on pose graph registration]
-      - #link("references/registration presentation bonus.pdf")[Ideas related to the above presentation]
-      - #link("https://robotics.caltech.edu/~jerma/research_papers/scan_matching_papers/milios_globally_consistent.pdf")[Lu and Milios paper] #text(gray, size: 12pt)["Globally Consistent Range Scan Alignment for Environment Mapping", April 1997. Introduces these ideas in the context of robotics]
-      - #link("https://robotik.informatik.uni-wuerzburg.de/telematics/download/3dpvt2008.pdf")[Borrmann et al. paper] #text(gray, size: 12pt)["The Efficient Extension of Globally Consistent Scan Matching to 6 DoF", June 2008. Extends concepts in the above paper to 3D. We aren't using this paper's ideas, but it helped me understand what was going on better]
-    ],
-    [
-      *Laser spot modeling*
-    ],
-    [
-      - #link("references/illumination_spot_modeling.pdf")[Write-up] #text(gray, size: 12pt)[Describes background and my work thus far on this]
-      - I have the git repo, but the code is unfinished, so I haven't pushed to Bitbucket. Should I push?
-    ],
-    [
-      *Processing performance report*
+      *Processing Performance Report*
     ],
     [
       - #link("https://bitbucket.org/3deo/processing-performance/src/master/")[processing-performance (master) on Bitbucket]
       - #link("https://bitbucket.org/3deo/acadia/src/master/")[acadia (master) on Bitbucket] #text(gray, size: 12pt)[Apptainers in apptainer_creation and slurm bricks in processing_workflow]
       - #link("https://bitbucket.org/3deo/python_3deo/src/master/fileIO/readGSOF.py")[python_3deo/fileIO/readGSOF.py] #text(gray, size: 12pt)[Used to collect certain scanning information]
+    ],
+    [
+      *Pose Graphs for Registration*
+    ], 
+    [
+      - #link("https://bitbucket.org/3deo/zreg_ncc/src/master/python/")[zreg_ncc/python (master) on Bitbucket] #text(gray, size: 12pt)[see lu_milios.py for my initial implementation, pose_graph.py for improved Lie algebra implementation]
+      - #link("references/registration presentation.pdf")[Presentation I gave on pose graph registration]
+      - #link("references/registration presentation bonus.pdf")[Ideas related to the above presentation]
+      - #link("https://robotics.caltech.edu/~jerma/research_papers/scan_matching_papers/milios_globally_consistent.pdf")[Lu and Milios paper] #text(gray, size: 12pt)["Globally Consistent Range Scan Alignment for Environment Mapping", April 1997. Introduces these ideas in the context of robotics]
+      - #link("https://robotik.informatik.uni-wuerzburg.de/telematics/download/3dpvt2008.pdf")[Borrmann et al. paper] #text(gray, size: 12pt)["The Efficient Extension of Globally Consistent Scan Matching to 6 DoF", June 2008. Extends concepts in the above paper to 3D. We aren't using this paper's new ideas, but it helped me understand what was going on better]
+    ],
+    [
+      *Modeling the Laser Illumination Spot*
+    ],
+    [
+      - #link("references/illumination_spot_modeling.pdf")[Write-up] #text(gray, size: 12pt)[Describes background and my work thus far on this]
+      - I have the git repo, but the code is unfinished, so I haven't pushed to Bitbucket. Should I push?
     ],
     columns: (40%, auto),
     align: (left + top, left + horizon),

@@ -343,7 +343,12 @@
   )
   set text(size: 26pt, hyphenate: false)
   show math.equation: set text(size: 22pt, font: "DejaVu Math TeX Gyre")
-  set par(justify: false)
+  set par(justify: false, leading: 14pt, spacing: 22pt)
+  set list(spacing: 22pt)
+  show heading: it => {
+    it
+    v(8pt)
+  }
 
   show: touying-slides.with(
     config-page(
@@ -354,7 +359,7 @@
     ),
     config-common(
       slide-fn: slide,
-      new-section-slide-fn: new-section-slide,
+      new-section-slide-fn: new-section-slide
     ),
     config-methods(
         init: (self: none, body) => {
