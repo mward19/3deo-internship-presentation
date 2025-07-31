@@ -81,8 +81,8 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
 == Introduction
 #align(center + horizon, grid(
   [- BYU Applied and Computational Math (DS & ML, April 2026)], image("aux/acme.jpg", height: 20%),
-  [- Biophysics Simulation Group---computer vision and competition dataset curation], image("aux/byu-kaggle-logo.png", height: 20%),
-  [- Data engineer intern with you until August 16#super[th]!], image("aux/Logo_classic_trim.png", height: 20%),
+  [- Biophysics Simulation Group---computer vision and competition dataset curation with 3D pictures of bacteria (cryo-ET tomograms)], image("aux/byu-kaggle-logo.png", height: 20%),
+  [- Data engineer intern with you until August 16#super[th]!], image("aux/3DEO_Logo_Huge.png", height: 30%),
   columns: (auto, 30%),
   align: (left + horizon, center + horizon),
   row-gutter: 1em
@@ -134,6 +134,7 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
     #align(center)[Report Format]
     #let clarification(input) = text(gray, size: 16pt, input)
 
+    - #text(olive)[Contents]
     - #text(red)[Overview] (information about all tiles together)
     - #text(blue)[Tile 1] (information specific to this tile)
     - #text(blue)[Tile 2]
@@ -149,6 +150,8 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
   set text(weight: "thin", font: "Libertinus Serif", fill: color)
   [{]
 }
+
+#place(bottom + right, dx: -17%, dy: -89%, scale(x: 300%, y: 400%, brace(olive)))
 #place(bottom + right, dx: -17%, dy: -58%, scale(x: 300%, y: 800%, brace(red)))
 #place(bottom + right, dx: -17%, dy: -22%, scale(x: 300%, y: 450%, brace(blue)))
 #place(bottom + right, dx: -16.5%, dy: -3%, scale(150%, text(blue)[$dots.v$]))
@@ -160,7 +163,7 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
   
   #arrow 
   
-  .json of filepaths and statistics \
+  JSON of filepaths and statistics \
   #text(gray, size: 14pt)[to be used in report]
   
   #arrow
@@ -171,23 +174,22 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
   PDF report
 ]
 
-== Links to example reports
+== Example Processing Reports
 #align(center + horizon, grid(
   [
-    #link("aux/processing_report.pdf")[Single target report] \
+    #link("aux/processing_report.pdf")[Single Tile Report] \
     #image("aux/thumbnail-report.png", height: 70%)
   ],
   [
-    #link("aux/processing_report_mapping.pdf")[Mapping report] \
+    #link("aux/processing_report_mapping.pdf")[Mapping Report (56 tiles)] \
     #image("aux/thumbnail-report-mapping.png", height: 70%)
   ],
-  columns: (40%, 40%),
+  columns: (50%, 50%),
   align: (center, center)
 ))
 
 == Overview
-#align(horizon, grid(
-  [
+#place(left + horizon, dx: 50pt)[
     #let clarification(input) = {
       h(1em)
       text(gray, size: 16pt, input)
@@ -196,13 +198,16 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
       #clarification()[How long processing took, CPU time, etc.]
     - Scan summary \
       #clarification()[Number of detections, how long scanning took, etc.]
-  ],
-  [
-    #image("aux/hafb-view.png", height: 60%)
-  ],
-  columns: (50%, 50%),
-  align: (left+horizon, center+horizon)
-))
+  ]
+
+#place(horizon + right, dx: -100pt, image("aux/processing_report_overview.png"))
+#place(
+  horizon + right,
+  dx: 35pt,
+  rotate(90deg, text(weight: "medium", size: 16pt)[
+    (Overview from Single Tile Report)
+  ])
+)
 
 == Processing Summary
 #place(horizon+center, dy: 16pt, image("aux/processing-example.png", height: 88%))
@@ -210,8 +215,7 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
 #place(horizon+center, dy: 16pt, image("aux/processing-timeline.png", height: 60%))
 
 == Per Tile Sections
-#align(horizon, grid(
-  [
+#place(left + horizon, dx: 50pt)[
     #let clarification(input) = {
       h(1em)
       text(gray, size: 16pt, input)
@@ -223,15 +227,25 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
       #clarification()[Reasons for rejection]
     - Registration information \ 
       #clarification()[To evaluate success of registration]
-  ],
-  [
-    #image("aux/hafb-view.png", height: 60%)
-  ],
-  columns: (50%, 50%),
-  align: (left+horizon, center+horizon)
-))
+  ]
 
+#place(horizon + right, dx: -100pt, image("aux/processing_report_tile.png"))
+#place(
+  horizon + right,
+  dx: 65pt,
+  rotate(90deg, text(weight: "medium", size: 16pt)[
+    (HAFB_tieline_019 from Single Tile Report)
+  ])
+)
 
+== Future Work
+- Continue to refine wording and format for clarity
+- Finish implementing fields
+  - Scan density information
+  - Report on more data rejection reasons
+  - Registration success metrics
+- Get client feedback---what do they want to see in the report?
+- Get #LaTeX compilation container smaller
 
 // ---
 // #place(horizon+center, dy: 16pt, dx: 0%, image("aux/hafb-view.png", height: 80%))
