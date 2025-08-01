@@ -424,7 +424,13 @@ We have ways to move one scan to align with another, with some uncertainty. How 
 
 ---
 #align(center)[
-  *Profile Analysis (Barrett Park)* \
+  *Profile Analysis (Barrett Park, gazebo)* \
+  #text(gray, weight: "medium", size: 18pt)[(only scans ending in `scan00010`)]
+]
+#image("aux/gazebo_target.png", height: 70%)
+---
+#align(center)[
+  *Profile Analysis (Barrett Park, gazebo)* \
   #text(gray, weight: "medium", size: 18pt)[(only scans ending in `scan00010`)]
 ]
 #v(-18pt)
@@ -433,18 +439,48 @@ We have ways to move one scan to align with another, with some uncertainty. How 
   #grid(
     [_Old ncc_nxn Optimizer_],
     [_Lu-Milios Optimizer_],
-    image("aux/oldopt_ghost_barrett.png", width: 95%), image("aux/lumopt_ghost_barrett.png"),
+    image("aux/old_gazebo.png", width: 95%), image("aux/lum_gazebo.png"),
     align: center + horizon,
     columns: (50%, 50%),
     rows: (10%, 65%)
   )
 ]
 #place(center + bottom, dy: -20pt)[
-  #text(gray, weight: "medium", size: 18pt)[(notice ghosting at upper right in both images)]
+  #text(gray, weight: "medium", size: 18pt)[(notice ghosting at upper left in both images)]
 ]
-#place(left + bottom, dx: 183pt, dy: -59pt)[2 m]
-#place(left + bottom, dx: 589pt, dy: -59pt)[2 m]
-#place(left + bottom, dx: -20pt, dy: -150pt)[#rotate(-90deg)[1 m]]
+#place(left + bottom, dx: 183pt, dy: -59pt)[5 m]
+#place(left + bottom, dx: 589pt, dy: -59pt)[5 m]
+#place(left + bottom, dx: -20pt, dy: -150pt)[#rotate(-90deg)[2 m]]
+
+---
+#align(center)[
+  *Profile Analysis (Barrett Park, building on northeast)* \
+  #text(gray, weight: "medium", size: 18pt)[(only scans ending in `scan00010`)]
+]
+#image("aux/ghost_target.png", height: 70%)
+---
+#align(center)[
+  *Profile Analysis (Barrett Park, building on northeast)* \
+  #text(gray, weight: "medium", size: 18pt)[(only scans ending in `scan00010`)]
+]
+#v(-18pt)
+#block()[
+  #set text(weight: "medium")
+  #grid(
+    [_Old ncc_nxn Optimizer_],
+    [_Lu-Milios Optimizer_],
+    image("aux/old_ghost.png", width: 95%), image("aux/lum_ghost.png"),
+    align: center + horizon,
+    columns: (50%, 50%),
+    rows: (10%, 65%)
+  )
+]
+#place(center + bottom, dy: -20pt)[
+  #text(gray, weight: "medium", size: 18pt)[(notice ghosting at upper left in both images)]
+]
+#place(left + bottom, dx: 183pt, dy: -59pt)[5 m]
+#place(left + bottom, dx: 589pt, dy: -59pt)[5 m]
+#place(left + bottom, dx: -20pt, dy: -150pt)[#rotate(-90deg)[2 m]]
 
 
 == Ongoing and Future Work
