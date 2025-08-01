@@ -179,12 +179,12 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
   [
     #link("aux/processing_report.pdf")[Single Tile Report] \
     #image("aux/thumbnail-report.png", height: 70%)
-    #text(black, size: 20pt, weight: "medium")[6 pages]
+    #text(black, size: 20pt, weight: "medium")[(6 pages)]
   ],
   [
     #link("aux/processing_report_mapping.pdf")[Mapping Report (56 tiles)] \
     #image("aux/thumbnail-report-mapping.png", height: 70%)
-    #text(black, size: 20pt, weight: "medium")[203 pages]
+    #text(black, size: 20pt, weight: "medium")[(203 pages)]
   ],
   columns: (50%, 50%),
   align: (center, center)
@@ -381,14 +381,6 @@ We have ways to move one scan to align with another, with some uncertainty. How 
   - Note: Improper to perform linear least squares on Euler angles, but works alright since angles are very small (no more than a few mrad)
 ]
 == Comparing Old Optimizer with Lu-Milios
-#place(center + horizon, block(width: 90%)[
-  "Old optimizer" 
-
-  #text(weight: "medium")[`optimize_translations` function in `ncc_nxn.py`]
-
-  #text(weight: "medium", size: 20pt)[Replaced by Lu-Milios in zreg_ncc commit 2b6d0d4 on July 18th]
-])
----
 #align(center)[*Optimization Time (Barrett Park)*]
 #place(center + horizon, block()[
   #set text(weight: "medium")
@@ -407,6 +399,8 @@ We have ways to move one scan to align with another, with some uncertainty. How 
     inset: 8pt
   )
 ])
+
+#place(bottom + center, text(gray, size: 16pt)[See _References_ for link to old optimizer])
 
 ---
 #align(center)[*Optimized Translation Plots (Barrett Park)*]
@@ -625,7 +619,7 @@ Growth
 #block()[
   #set text(size: 18pt)
   #set list(spacing: 12pt)
-  #set par(leading: 10pt)
+  #set par(leading: 8pt)
   #grid(
     [
       *Processing Performance Report*
@@ -639,18 +633,18 @@ Growth
       *Pose Graphs for Registration*
     ], 
     [
-      - #link("https://bitbucket.org/3deo/zreg_ncc/src/master/python/")[zreg_ncc/python (master) on Bitbucket] #text(gray, size: 12pt)[see lu_milios.py for my initial implementation, pose_graph.py for improved Lie algebra implementation]
+      - #link("https://bitbucket.org/3deo/zreg_ncc/src/master/python/")[zreg_ncc/python (master) on Bitbucket] #text(gray, size: 12pt)[see lu_milios.py for my Lu-Milios implementation, pose_graph.py for Lie algebra implementation in progress]
       - #link("references/registration presentation.pdf")[Presentation I gave on pose graph registration]
       - #link("references/registration presentation bonus.pdf")[Ideas related to the above presentation]
       - #link("https://robotics.caltech.edu/~jerma/research_papers/scan_matching_papers/milios_globally_consistent.pdf")[Lu and Milios paper] #text(gray, size: 12pt)["Globally Consistent Range Scan Alignment for Environment Mapping", April 1997. Introduces these ideas in the context of robotics]
       - #link("https://robotik.informatik.uni-wuerzburg.de/telematics/download/3dpvt2008.pdf")[Borrmann et al. paper] #text(gray, size: 12pt)["The Efficient Extension of Globally Consistent Scan Matching to 6 DoF", June 2008. Extends concepts in the above paper to 3D. We aren't using this paper's new ideas, but it helped me understand what was going on better]
+      - #link("https://bitbucket.org/3deo/zreg_ncc/commits/2b6d0d4d201a815ffae8883256b333029eb7dc45#comment-17902146")[Old optimizer] #text(gray, size: 12pt)[Replaced by Lu-Milios in zreg_ncc commit 2b6d0d4 on July 18th] <old-opt>
     ],
     [
       *Modeling the Laser Illumination Spot*
     ],
     [
       - #link("references/illumination_spot_modeling.pdf")[Write-up] #text(gray, size: 12pt)[Describes background and my work thus far on this]
-      - I have the git repo, but the code is unfinished, so I haven't pushed to Bitbucket. Should I push?
     ],
     columns: (40%, auto),
     align: (left + top, left + horizon),
