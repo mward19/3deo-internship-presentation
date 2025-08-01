@@ -385,7 +385,7 @@ We have ways to move one scan to align with another, with some uncertainty. How 
 #place(center + horizon, block()[
   #set text(weight: "medium")
   #grid(
-    [_Old ncc_nxn Optimizer_],
+    [_Old `ncc_nxn` Optimizer_],
     [_Lu-Milios Optimizer_],
     text(size: 32pt)[2m 54s], 
     [
