@@ -389,20 +389,6 @@ We have ways to move one scan to align with another, with some uncertainty. How 
   #text(weight: "medium", size: 20pt)[Replaced by Lu-Milios in zreg_ncc commit 2b6d0d4 on July 18th]
 ])
 ---
-#align(center)[*Optimized Translation Plots (Barrett Park)*]
-#v(-12pt)
-#block()[
-  #set text(weight: "medium")
-  #grid(
-    [_Old ncc_nxn Optimizer_],
-    [_Lu-Milios Optimizer_],
-    image("aux/registrations_oldopt.png"), image("aux/registrations_lumopt.png"),
-    align: center + horizon,
-    columns: (50%, 50%),
-    rows: (10%, 72%)
-  )
-]
----
 #align(center)[*Optimization Time (Barrett Park)*]
 #place(center + horizon, block()[
   #set text(weight: "medium")
@@ -421,6 +407,21 @@ We have ways to move one scan to align with another, with some uncertainty. How 
     inset: 8pt
   )
 ])
+
+---
+#align(center)[*Optimized Translation Plots (Barrett Park)*]
+#v(-12pt)
+#block()[
+  #set text(weight: "medium")
+  #grid(
+    [_Old ncc_nxn Optimizer_],
+    [_Lu-Milios Optimizer_],
+    image("aux/registrations_oldopt.png"), image("aux/registrations_lumopt.png"),
+    align: center + horizon,
+    columns: (50%, 50%),
+    rows: (10%, 72%)
+  )
+]
 
 ---
 #align(center)[
@@ -448,9 +449,9 @@ We have ways to move one scan to align with another, with some uncertainty. How 
 #place(center + bottom, dy: -20pt)[
   #text(gray, weight: "medium", size: 18pt)[(notice ghosting at upper left in both images)]
 ]
-#place(left + bottom, dx: 183pt, dy: -59pt)[5 m]
-#place(left + bottom, dx: 589pt, dy: -59pt)[5 m]
-#place(left + bottom, dx: -20pt, dy: -150pt)[#rotate(-90deg)[2 m]]
+#place(left + bottom, dx: 168pt, dy: -55pt)[1 m]
+#place(left + bottom, dx: 602pt, dy: -55pt)[1 m]
+#place(left + bottom, dx: -20pt, dy: -136pt)[#rotate(-90deg)[1 m]]
 
 ---
 #align(center)[
@@ -478,9 +479,9 @@ We have ways to move one scan to align with another, with some uncertainty. How 
 #place(center + bottom, dy: -20pt)[
   #text(gray, weight: "medium", size: 18pt)[(notice ghosting at upper left in both images)]
 ]
-#place(left + bottom, dx: 183pt, dy: -59pt)[5 m]
-#place(left + bottom, dx: 589pt, dy: -59pt)[5 m]
-#place(left + bottom, dx: -20pt, dy: -150pt)[#rotate(-90deg)[2 m]]
+#place(left + bottom, dx: 112pt, dy: -27pt)[5 m]
+#place(left + bottom, dx: 642pt, dy: -27pt)[5 m]
+#place(left + bottom, dx: -20pt, dy: -160pt)[#rotate(-90deg)[2 m]]
 
 
 == Ongoing and Future Work
