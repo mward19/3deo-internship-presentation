@@ -179,10 +179,12 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
   [
     #link("aux/processing_report.pdf")[Single Tile Report] \
     #image("aux/thumbnail-report.png", height: 70%)
+    #text(black, size: 20pt, weight: "medium")[6 pages]
   ],
   [
     #link("aux/processing_report_mapping.pdf")[Mapping Report (56 tiles)] \
     #image("aux/thumbnail-report-mapping.png", height: 70%)
+    #text(black, size: 20pt, weight: "medium")[203 pages]
   ],
   columns: (50%, 50%),
   align: (center, center)
@@ -246,7 +248,7 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
   - Registration success metrics
   - Warnings---for example, warn if the beam was dumping
 - Get client feedback---what do they want to see in the report?
-- Get #LaTeX compilation container smaller
+- Make #LaTeX compilation container smaller
 
 // ---
 // #place(horizon+center, dy: 16pt, dx: 0%, image("aux/hafb-view.png", height: 80%))
@@ -364,7 +366,12 @@ We have ways to move one scan to align with another, with some uncertainty. How 
 }
 #block()[
   #set list(spacing: 32pt)
-  - Implemented closed-form pose graph optimizer as described in Lu and Milios' 1997 paper in full generality 
+  - Implemented registration optimizer using the closed-form least squares pose graph solution described in Lu and Milios' 1997 paper
+  #let bm(it) = math.bold(math.upright(it))
+  $
+    bm(X) = (bm(H)^T bm(C)^(-1) bm(H))^(-1) bm(H)^T bm(C)^(-1) macron(bm(D)),
+    quad quad quad bm(C)_bm(X) = (bm(H)^T bm(C)^(-1) bm(H))^(-1)
+  $
   #pause
   - Parameters:
     - Expected translational error of 1 meter, 2 mrad \
@@ -373,8 +380,71 @@ We have ways to move one scan to align with another, with some uncertainty. How 
   #pause
   - Note: Improper to perform linear least squares on Euler angles, but works alright since angles are very small (no more than a few mrad)
 ]
-== Results from Lu-Milios Implementation
+== Comparing Old Optimizer with Lu-Milios
+#place(center + horizon, block(width: 90%)[
+  "Old optimizer" 
 
+  #text(weight: "medium")[`optimize_translations` function in `ncc_nxn.py`]
+
+  #text(weight: "medium", size: 20pt)[Replaced by Lu-Milios in zreg_ncc commit 2b6d0d4 on July 18th]
+])
+---
+#align(center)[*Optimized Translation Plots (Barrett Park)*]
+#v(-12pt)
+#block()[
+  #set text(weight: "medium")
+  #grid(
+    [_Old ncc_nxn Optimizer_],
+    [_Lu-Milios Optimizer_],
+    image("aux/registrations_oldopt.png"), image("aux/registrations_lumopt.png"),
+    align: center + horizon,
+    columns: (50%, 50%),
+    rows: (10%, 72%)
+  )
+]
+---
+#align(center)[*Optimization Time (Barrett Park)*]
+#place(center + horizon, block()[
+  #set text(weight: "medium")
+  #grid(
+    [_Old ncc_nxn Optimizer_],
+    [_Lu-Milios Optimizer_],
+    text(size: 32pt)[2m 54s], 
+    [
+      #text(size: 32pt)[0m 3s]
+      
+      #text(gray, size: 16pt)[(58 times faster)]
+    ],
+    align: center + top,
+    columns: (50%, 50%),
+    row-gutter: 20pt,
+    inset: 8pt
+  )
+])
+
+---
+#align(center)[
+  *Profile Analysis (Barrett Park)* \
+  #text(gray, weight: "medium", size: 18pt)[(only scans ending in `scan00010`)]
+]
+#v(-18pt)
+#block()[
+  #set text(weight: "medium")
+  #grid(
+    [_Old ncc_nxn Optimizer_],
+    [_Lu-Milios Optimizer_],
+    image("aux/oldopt_ghost_barrett.png", width: 95%), image("aux/lumopt_ghost_barrett.png"),
+    align: center + horizon,
+    columns: (50%, 50%),
+    rows: (10%, 65%)
+  )
+]
+#place(center + bottom, dy: -20pt)[
+  #text(gray, weight: "medium", size: 18pt)[(notice ghosting at upper right in both images)]
+]
+#place(left + bottom, dx: 183pt, dy: -59pt)[2 m]
+#place(left + bottom, dx: 589pt, dy: -59pt)[2 m]
+#place(left + bottom, dx: -20pt, dy: -150pt)[#rotate(-90deg)[1 m]]
 
 
 == Ongoing and Future Work
@@ -404,7 +474,9 @@ $
 ---
 - Use non-linear least squares optimization to better handle orientation
 - [#h(1em) lie algebra graph results #h(1em)]
-- Determine if it is possible to 
+- Be smarter in choosing pairwise registration covariance (uncertainty)
+  - Automatically determine covariance using properties of the sensor or the data
+  - Use pairwise registration features to determine covariance
 
 // We have found success applying constant covariances. As long as most of the springs are right, the bad registrations will get "tight" and we can remove them. We can prune, we can downweight. Iterative least squares. Add a bit about this. IRLS, iteratively reweighted least squares. Trying to not let model skew. 
 
@@ -447,7 +519,7 @@ Growth
 #place(center + bottom, dx: -38pt, image("aux/normal.png", height: 25%))
 
 == Cannot Assume the Spot Stays Still
-#place(center + horizon, link("aux/hitmap_moving_average_window_100.mp4", image("aux/thumb1.png", height:40%)))
+#place(center + horizon, link("aux/hitmap_moving_average_window_100_slow.mp4", image("aux/hitmap-thumbnail.png", height:50%)))
 
 
 == Cannot Use Sample Mean and Covariance
@@ -483,10 +555,17 @@ Growth
 ]
 
 
-
-
 == Successful Fit
-#place(center + horizon, link("aux/spot_movement_window_100_gaussians_1_new_gmmis_1_in_1.mp4", image("aux/thumb1.png", height:60%)))
+#place(
+  center + horizon, 
+  link(
+    "aux/spot_movement_window_100_gaussians_1_new_gmmis_1_in_1_slow.mp4", 
+    {
+      show link: it => it.default()
+      place(center + horizon, image("aux/fitted-thumbnail.png", height:50%))
+    }
+  )
+)
 
 == Potential Applications
 - Automatic quality control---non-invasive way to check alignment in-flight without a particular scan pattern
