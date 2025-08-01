@@ -385,8 +385,8 @@ We have ways to move one scan to align with another, with some uncertainty. How 
 #place(center + horizon, block()[
   #set text(weight: "medium")
   #grid(
-    [_Old `ncc_nxn` Optimizer_],
-    [_Lu-Milios Optimizer_],
+    [#link("https://bitbucket.org/3deo/zreg_ncc/commits/2b6d0d4d201a815ffae8883256b333029eb7dc45#comment-17902146")[_Old ncc_nxn Optimizer_]],
+    [#link("https://bitbucket.org/3deo/zreg_ncc/src/master/python/lu_milios.py")[_Lu-Milios Optimizer_]],
     text(size: 32pt)[2m 54s], 
     [
       #text(size: 32pt)[0m 3s]
@@ -633,12 +633,11 @@ Growth
       *Pose Graphs for Registration*
     ], 
     [
-      - #link("https://bitbucket.org/3deo/zreg_ncc/src/master/python/")[zreg_ncc/python (master) on Bitbucket] #text(gray, size: 12pt)[see lu_milios.py for my Lu-Milios implementation, pose_graph.py for Lie algebra implementation in progress]
       - #link("references/registration presentation.pdf")[Presentation I gave on pose graph registration]
       - #link("references/registration presentation bonus.pdf")[Ideas related to the above presentation]
       - #link("https://robotics.caltech.edu/~jerma/research_papers/scan_matching_papers/milios_globally_consistent.pdf")[Lu and Milios paper] #text(gray, size: 12pt)["Globally Consistent Range Scan Alignment for Environment Mapping", April 1997. Introduces these ideas in the context of robotics]
-      - #link("https://robotik.informatik.uni-wuerzburg.de/telematics/download/3dpvt2008.pdf")[Borrmann et al. paper] #text(gray, size: 12pt)["The Efficient Extension of Globally Consistent Scan Matching to 6 DoF", June 2008. Extends concepts in the above paper to 3D. We aren't using this paper's new ideas, but it helped me understand what was going on better]
-      - #link("https://bitbucket.org/3deo/zreg_ncc/commits/2b6d0d4d201a815ffae8883256b333029eb7dc45#comment-17902146")[Old optimizer] #text(gray, size: 12pt)[Replaced by Lu-Milios in zreg_ncc commit 2b6d0d4 on July 18th] <old-opt>
+      - #link("https://bitbucket.org/3deo/zreg_ncc/commits/2b6d0d4d201a815ffae8883256b333029eb7dc45#comment-17902146")[Old optimizer] #text(gray, size: 12pt)[Replaced by Lu-Milios in zreg_ncc commit 2b6d0d4 on July 18th]
+      - #link("https://bitbucket.org/3deo/zreg_ncc/src/master/python/lu_milios.py")[Lu-Milios implementation] #text(gray, size: 12pt)[zreg_ncc, python/lu_milios.py]
     ],
     [
       *Modeling the Laser Illumination Spot*
