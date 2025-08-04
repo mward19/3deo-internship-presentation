@@ -526,7 +526,12 @@ $
 
 #place(horizon + center, dy: 6%, image("aux/spot.png", height: 95%))
 
----
+== Why Model the Illumination Spot
+- More accurate pointwise reflectivity estimates
+- Validate or refine alignment in-flight
+- Track defective pixels
+
+== Laser Illumination Spot
 
 #place(horizon + center, dy: 6%, dx: 0%, image("aux/avg_hitmap.png", height: 95%))
 #align(left)[
@@ -534,11 +539,6 @@ $
   Total *photon detections per pixel* during \
 `20230627_095732_cuchillo1_scan00091.bpf`
 ]
-
-== Why Model the Illumination Spot
-- More accurate pointwise reflectivity estimates
-- Validate or refine alignment in-flight
-- Track defective pixels
 
 
 == Spot is Approximately Gaussian
