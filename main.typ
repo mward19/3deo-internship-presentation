@@ -34,6 +34,8 @@
   box(l + h(-0.32em) + a + h(-0.13em) + TeX)
 }
 
+#import "@preview/fletcher:0.5.8" as fletcher: diagram, node, edge
+
 #title-slide()
 
 
@@ -128,7 +130,26 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
   align: horizon + left,
   gutter: 1em
 ))
----
+
+== Processing Report Generation Process
+#align(center + horizon)[
+  Processing directory \
+  #text(gray, size: 14pt)[for example, `albert:/shares/processed/cuchillo/flightData/FlatCreek`]
+  
+  #arrow 
+  
+  JSON of filepaths and statistics \
+  #text(gray, size: 14pt)[to be used in report]
+  
+  #arrow
+  
+  #LaTeX report
+  #arrow
+
+  PDF report
+]
+
+== Report Format
 #place(horizon+center, grid(
   [
     #align(center)[Report Format]
@@ -156,24 +177,6 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
 #place(bottom + right, dx: -17%, dy: -22%, scale(x: 300%, y: 450%, brace(blue)))
 #place(bottom + right, dx: -16%, dy: -3%, scale(100%, text(blue)[#math.dots.v]))
 
-== Processing Report Generation Process
-#align(center + horizon)[
-  Processing directory \
-  #text(gray, size: 14pt)[say, `albert:/shares/processed/cuchillo/flightData/FlatCreek`]
-  
-  #arrow 
-  
-  JSON of filepaths and statistics \
-  #text(gray, size: 14pt)[to be used in report]
-  
-  #arrow
-  
-  #LaTeX report
-  #arrow
-
-  PDF report
-]
-
 == Example Processing Reports
 #align(center + horizon, grid(
   [
@@ -189,6 +192,7 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
   columns: (50%, 50%),
   align: (center, center)
 ))
+
 
 == Overview
 #place(left + horizon, dx: 50pt)[
@@ -214,7 +218,37 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
 == Processing Summary
 #place(horizon+center, dy: 16pt, image("aux/processing-example.png", height: 88%))
 == Processing Timeline
+#place(horizon+center, dy: 16pt, image("aux/processing-timeline-1-thread.png", height: 60%))
+
+
+#pause
+#place(
+  center + horizon,
+  dx: 126pt,
+  dy: -5pt,
+  diagram(
+    node((0, 0), [], name: <A>),
+    node((2.8, 0), [], name: <B>),
+    edge(<A>, <B>, "|-|", label: "Duration")  
+  )
+)
+
+
+---
 #place(horizon+center, dy: 16pt, image("aux/processing-timeline.png", height: 60%))
+
+#place(
+  center + horizon,
+  dx: -16pt,
+  dy: -59pt,
+  diagram(
+    node((0, 0), [], name: <A>),
+    node((0, 0.2), [], name: <B>),
+    edge(<A>, <B>, "|-|", label: "Tile ID", label-side: left)
+  )
+)
+
+
 
 == Per Tile Sections
 #place(left + horizon, dx: 50pt)[
@@ -258,6 +292,7 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
 // ]
 
 #focus-slide()[Pose Graphs for Registration]
+
 == Ghosting
 #align(horizon+center, {
   grid(
@@ -268,9 +303,9 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
   align: (right, left)
 )})
 
-== Scan Poses
-#place(center + horizon, dy: 8%, image("aux/pairwise registration_annotated-4.png", height: 95%))
-#place(center + horizon, dx: 105pt, dy: -120pt, text(size: 22pt, weight: "medium")[Starting Poses])
+// == Scan Poses
+// #place(center + horizon, dy: 8%, image("aux/pairwise registration_annotated-4.png", height: 95%))
+// #place(center + horizon, dx: 105pt, dy: -120pt, text(size: 22pt, weight: "medium")[Starting Poses])
 
 == Pose Graph
 
@@ -344,7 +379,14 @@ We have ways to move one scan to align with another, with some uncertainty. How 
     #image("aux/error_z_all.png", height: 65%)
     #place(center + top, dx: -14pt, dy: -8pt, text(size: 18pt)[Comparing pairwise and global registrations])
     #place(left + top, dx: -1%, dy: 6%, rect(fill: white, height: 200pt))
+    
+    #place(left + top, dx: -3%, dy: 40%, rotate(-90deg, text(weight: "medium", size: 16.5pt)[Scan ID]))
+
     #place(left + bottom, dx: -1%, dy: 0%, rect(fill: white, width: 250pt, height: 40pt))
+
+    #place(left + top, dx: 37%, dy: 92%, rotate(-0deg, text(weight: "medium", size: 16.5pt)[Scan ID]))
+
+
     #place(left + top, dx: 94%, dy: 6%, rect(fill: white, height: 200pt))
     #place(right + horizon, dx: 65pt, dy: -10pt, rotate(90deg, text(weight: "medium", size: 18pt)[Z axis difference (m)]))
   ],
@@ -540,6 +582,14 @@ Growth
 //   Analyzing `20230627_095732_cuchillo1_scan00091.bpf`
 // ]
 // #place(horizon + center, dy: 7%, image("aux/scan91_z.png", height: 80%))
+// 
+
+== Why Model the Spot
+- More accurate pointwise reflectivity estimate
+- Validate or refine alignment in-flight
+- Track defective pixels
+
+
 == Spot is Approximately Gaussian
 #place(horizon + center, dy: 6%, dx: 0%, image("aux/avg_hitmap.png", height: 95%))
 #align(left)[
@@ -573,17 +623,23 @@ Growth
   - Fitting Gaussian with sample mean and covariance doesn't work
 ])
 
-== Approach
-#block()[
-  // #set par(leading: 8pt)
-  // #set list(spacing: 16pt)
-  Fit a new Gaussian to each 100-frame pixel hitmap average (no filtering) with `pygmmis` #v(-0.6em)
-  #par[]
+== Attempts
+For each 100-frame pixel hitmap average,
+
+- Sample mean and covariance with Gaussian Mixture Models
+
+#pause
+
+- Bayesian inference to fit Gaussian parameters given camera frame bounds
+
+#pause
+
+- `pygmmis`---Gaussian Mixture Models for occluded data
   #set text(size: 24pt)
+  
   - Written by Princeton astronomers to model luminosity of galaxies from truncated camera data (like ours)
   - Gaussian Mixture Models (GMMs) that can handle occluded data
   - Under the hood, uses Expectation Maximization (standard for GMMs), but also generates mock samples to handle occluded regions
-]
 
 
 == Successful Fit
@@ -598,12 +654,13 @@ Growth
   )
 )
 
-== Potential Applications
-- Automatic quality control---non-invasive way to check alignment in-flight without a particular scan pattern
-- Generate better pointwise reflectivity estimates
-- Track pixels exhibiting unusual behavior in real time
+// == Potential Applications
+// - Automatic quality control---non-invasive way to check alignment in-flight without a particular scan pattern
+// - Generate better pointwise reflectivity estimates
+// - Track pixels exhibiting unusual behavior in real time
 
 == Future Work
+
 - Continue investigating faster alternatives, using `pygmmis` as ground truth
 
   - Blur pixel heatmap to quickly track spot center without having to recalculate covariance
@@ -612,7 +669,7 @@ Growth
 
 - Test on more scans
 
-- Use to create an improved reflectivity estimate
+- Implement reflectivity estimate normalized by spot illumination model
   
 
 == References
