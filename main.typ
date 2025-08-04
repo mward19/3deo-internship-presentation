@@ -33,52 +33,15 @@
   let a = text(baseline: -0.35em, size: 0.66em, "A")
   box(l + h(-0.32em) + a + h(-0.13em) + TeX)
 }
+#let clarification(input) = {
+  h(1.5em)
+  text(gray, size: 16pt, input)
+}
 
 #import "@preview/fletcher:0.5.8" as fletcher: diagram, node, edge
 
 #title-slide()
 
-
-/*
-Presentation is 30 minutes, 15 minutes for questions. Materials for next "job interview"... I wonder where? August 4th. They really want to know how I grew and what I learned. Sure, need some technical details, but there is time for questions.
-
-Talk about
-- What I did
-- What I learned
-- How I grew
-
-What did I do?
-- Pose graph optmization
-- Kriging
-- Registration metrics
-- Spot modeling with truncated Gaussian
-- PCA features
-- Processing performance report
-- Voxel spacing calculation for registration
-  - GSOF reader
-- Integration of code into Acadia (ground finder), containers
-
-What did I learn?
-- BFS not DFS when debugging. Wasted a day haha
-- Don't get ahead of yourself while implementing code, stay open to new ideas. It's never finished. Registration, lie space stuff worked better
-- Learned to deeply understand papers
-- Working with other engineers, git adventures, coordinating and collaborating
-- Operating like a surgeon on a large codebase - fix and test components
-- Communicate constantly. Ask questions early and frequently
-
-How did I grow?
-- More patience working on a challenging problem. School doesn't give you time for that
-- Better at working on other peoples' code. Make your code readable because _someone will read it_!
-- More confidence learning new ideas and implementing them
-- Gained some humility seeing Lawrence cook some stuff up way faster than I could haha
-
-***
-Format. Will talk about five or so experiences. Each time, discuss the goal, what I learned, and how I grew.
-
-- Goal
-- Knowledge
-- Growth
-*/
 
 == Introduction
 #align(center + horizon, grid(
@@ -217,8 +180,13 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
 
 == Processing Summary
 #place(horizon+center, dy: 16pt, image("aux/processing-example.png", height: 88%))
+
+#place(bottom+center, text(gray, size: 20pt, weight: "medium")[From Mapping Report (56 tiles)])
+
 == Processing Timeline
 #place(horizon+center, dy: 16pt, image("aux/processing-timeline-1-thread.png", height: 60%))
+
+#place(bottom+center, text(gray, size: 20pt, weight: "medium")[From Single Tile Report])
 
 
 #pause
@@ -248,6 +216,7 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
   )
 )
 
+#place(bottom+center, text(gray, size: 20pt, weight: "medium")[From Mapping Report (56 tiles)])
 
 
 == Per Tile Sections
@@ -284,20 +253,14 @@ Format. Will talk about five or so experiences. Each time, discuss the goal, wha
 - Get client feedback---what do they want to see in the report?
 - Make #LaTeX compilation container smaller
 
-// ---
-// #place(horizon+center, dy: 16pt, dx: 0%, image("aux/hafb-view.png", height: 80%))
-// #place(horizon+center, dy: 0pt, dx: 23%, image("aux/hafb-page.png", height: 100%))
-// #block(width: 30%, inset: 1em)[
-//   - 
-// ]
 
 #focus-slide()[Pose Graphs for Registration]
 
 == Ghosting
 #align(horizon+center, {
   grid(
-  [Good registration], image("aux/roof_nxn.png", height: 90%),
-  [Bad registration \ #text(gray, size: 14pt)[notice that the roof is doubled here]], image("aux/roof_model.png", height: 90%),
+  [Good registration], image("aux/good circle.png", height: 90%),
+  [Bad registration \ #text(gray, size: 14pt)[notice that the building is doubled here]], image("aux/bad circle.png", height: 90%),
   rows: (43%, 43%),
   columns: (auto, 50%),
   align: (right, left)
@@ -482,9 +445,6 @@ We have ways to move one scan to align with another, with some uncertainty. How 
     rows: (10%, 65%)
   )
 ]
-#place(center + bottom, dy: -20pt)[
-  #text(gray, weight: "medium", size: 18pt)[(notice ghosting at upper left in both images)]
-]
 #place(left + bottom, dx: 168pt, dy: -55pt)[1 m]
 #place(left + bottom, dx: 602pt, dy: -55pt)[1 m]
 #place(left + bottom, dx: -20pt, dy: -136pt)[#rotate(-90deg)[1 m]]
@@ -513,7 +473,7 @@ We have ways to move one scan to align with another, with some uncertainty. How 
   )
 ]
 #place(center + bottom, dy: -20pt)[
-  #text(gray, weight: "medium", size: 18pt)[(notice ghosting at upper left in both images)]
+  #text(gray, weight: "medium", size: 18pt)[(notice identical ghosting at upper left in both images)]
 ]
 #place(left + bottom, dx: 112pt, dy: -27pt)[5 m]
 #place(left + bottom, dx: 642pt, dy: -27pt)[5 m]
@@ -545,24 +505,12 @@ X_i = vec(x_i, y_i, z_i, theta_i, phi.alt_i, psi_i) in RR^6
 $
 
 ---
-- Use non-linear least squares optimization to better handle orientation
-- [#h(1em) lie algebra graph results #h(1em)]
+- Use non-linear least squares optimization to better handle orientation \
+  #clarification()[Existing implementation spun its wheels for 3 hours on Barrett Park and failed...]
 - Be smarter in choosing pairwise registration covariance (uncertainty)
   - Automatically determine covariance using properties of the sensor or the data
   - Use pairwise registration features to determine covariance
 
-// We have found success applying constant covariances. As long as most of the springs are right, the bad registrations will get "tight" and we can remove them. We can prune, we can downweight. Iterative least squares. Add a bit about this. IRLS, iteratively reweighted least squares. Trying to not let model skew. 
-
-/* 
-Knowledge:
-  - Refined programming skills, put to the test my ability to implement mathematics. Implemented a paper and learned to work slowly. Just a couple weeks ago we caught another mistake in my initial implementation! 
-  - Modeling skills. Had to think deeply about that model and how I might use machine learning to optimize it. Would love to come back to this, but I don't think it's necessary for excellent registrations right now.
-  - Point cloud wrangling, viewing, comprehension of how long it takes to do things with this data
-  
-Growth
-- Patience to read a dense paper and understand it deeply enough to apply it to a new context
-- Patience to work through challenging questions when there isn't a "teacher" available to give me the answers
-*/
 #focus-slide()[Modeling the Laser Illumination Spot]
 == Laser Illumination Spot
 
@@ -576,16 +524,18 @@ Growth
 */
 
 #place(horizon + center, dy: 6%, image("aux/spot.png", height: 95%))
-// ---
-// #align(center)[
-//   #set text(size: 18pt)
-//   Analyzing `20230627_095732_cuchillo1_scan00091.bpf`
-// ]
-// #place(horizon + center, dy: 7%, image("aux/scan91_z.png", height: 80%))
-// 
 
-== Why Model the Spot
-- More accurate pointwise reflectivity estimate
+---
+
+#place(horizon + center, dy: 6%, dx: 0%, image("aux/avg_hitmap.png", height: 95%))
+#align(left)[
+  #set text(size: 22pt)
+  Total *photon detections per pixel* during \
+`20230627_095732_cuchillo1_scan00091.bpf`
+]
+
+== Why Model the Illumination Spot
+- More accurate pointwise reflectivity estimates
 - Validate or refine alignment in-flight
 - Track defective pixels
 
@@ -624,13 +574,18 @@ Growth
 ])
 
 == Attempts
-For each 100-frame pixel hitmap average,
+#let grayblue = {
+  let (r, g, b, _) = blue.components()
+  rgb(r, g, b, 55%)
+}
 
-- Sample mean and covariance with Gaussian Mixture Models
+For each 100-frame pixel hitmap average, fit Gaussian parameters with:
+
+- Gaussian Mixture Models \ #clarification()[Dealt with problem just described---sample is occluded, means and covariances are off]
 
 #pause
 
-- Bayesian inference to fit Gaussian parameters given camera frame bounds
+- Bayesian inference \ #clarification()[Necessary PyMC tools (cumulative distribution function of multivariate normal) #link("https://github.com/pymc-devs/pymc-extras/pull/60")[#text(grayblue)[not fully implemented]]]
 
 #pause
 
@@ -642,7 +597,7 @@ For each 100-frame pixel hitmap average,
   - Under the hood, uses Expectation Maximization (standard for GMMs), but also generates mock samples to handle occluded regions
 
 
-== Successful Fit
+== Successful Single-Gaussian Fit
 #place(
   center + horizon, 
   link(
@@ -663,7 +618,7 @@ For each 100-frame pixel hitmap average,
 
 - Continue investigating faster alternatives, using `pygmmis` as ground truth
 
-  - Blur pixel heatmap to quickly track spot center without having to recalculate covariance
+  - Blur pixel heatmap to quickly track spot center without having to recalculate covariance (if single Gaussian)
 
   - Fit to some subset of the data---random subset works surprisingly well
 
@@ -674,9 +629,9 @@ For each 100-frame pixel hitmap average,
 
 == References
 #block()[
-  #set text(size: 18pt)
-  #set list(spacing: 12pt)
-  #set par(leading: 8pt)
+  #set text(size: 19pt)
+  #set list(spacing: 14pt)
+  #set par(leading: 10pt)
   #grid(
     [
       *Processing Performance Report*
@@ -701,6 +656,7 @@ For each 100-frame pixel hitmap average,
     ],
     [
       - #link("references/illumination_spot_modeling.pdf")[Write-up] #text(gray, size: 12pt)[Describes background and my work thus far on this]
+      - #link("https://discourse.pymc.io/t/truncated-multivariate-normal-likelihood/17032")[PyMC forum discussion] #text(gray, size: 12pt)[I asked about using Bayesian inference---necessary tools not implemented]
     ],
     columns: (40%, auto),
     align: (left + top, left + horizon),
