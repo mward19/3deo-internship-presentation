@@ -295,14 +295,6 @@ We have ways to move one scan to align with another, with some uncertainty. How 
     lr((macron(D)_(i j) - (X_i - X_j)), size:#120%)
   $
 )
-#let show-ls-eq-cancel = place(
-  bottom + center,
-  $
-    cancel(limits("minimize")_({X_1, ..., X_n}) quad &sum_(i, j) lr((macron(D)_(i j) - (X_i - X_j)), size:#120%)^T 
-    C_(i j)^(-1) 
-    lr((macron(D)_(i j) - (X_i - X_j)), size:#120%))
-  $
-)
 
 // Approach
 
@@ -340,7 +332,7 @@ We have ways to move one scan to align with another, with some uncertainty. How 
 #grid(
   [
     #image("aux/error_z_all.png", height: 65%)
-    #place(center + top, dx: -14pt, dy: -8pt, text(size: 18pt)[Comparing pairwise and global registrations])
+    #place(center + top, dx: -14pt, dy: -8pt, text(size: 18pt)[Comparing pairwise and final registrations])
     #place(left + top, dx: -1%, dy: 6%, rect(fill: white, height: 200pt))
     
     #place(left + top, dx: -3%, dy: 40%, rotate(-90deg, text(weight: "medium", size: 16.5pt)[Scan ID]))
@@ -482,20 +474,27 @@ We have ways to move one scan to align with another, with some uncertainty. How 
 
 == Ongoing and Future Work
 // Problem is, angles are not linear and euclidean and friendly.
-#show-ls-eq
+#place(
+  bottom + center, dy: -80pt,
+  $
+    limits("minimize")_({X_1, ..., X_n}) quad &sum_(i, j) lr((macron(D)_(i j) - (X_i - X_j)), size:#120%)^T 
+    C_(i j)^(-1) 
+    lr((macron(D)_(i j) - (X_i - X_j)), size:#120%)
+  $
+)
 
-#pause #place(center + horizon, grid(
+#pause #place(center + horizon, dy: -20pt, grid(
   [
     #set text(size: 45pt)
-    #place(center + horizon, dx: 110pt, dy: 100pt, emoji.checkmark.box)
+    #place(center + horizon, dx: 110pt, dy: 70pt, emoji.checkmark.box)
     
-    #image("aux/3d_axes.png", height: 60%)
+    #image("aux/3d_axes.png", height: 40%)
   ],
   [
     #set text(size: 45pt)
-    #image("aux/euler_rot.png", height: 50%)
+    #image("aux/euler_rot.png", height: 38%)
 
-  #place(center + horizon, dx: 110pt, dy: 100pt, emoji.crossmark)
+  #place(center + horizon, dx: 110pt, dy: 70pt, emoji.crossmark)
   ],
   columns: (50%, 50%),
   align: center + horizon
@@ -504,9 +503,11 @@ We have ways to move one scan to align with another, with some uncertainty. How 
 X_i = vec(x_i, y_i, z_i, theta_i, phi.alt_i, psi_i) in RR^6
 $
 
----
+#v(35%)
 - Use non-linear least squares optimization to better handle orientation \
   #clarification()[Existing implementation spun its wheels for 3 hours on Barrett Park and failed...]
+---
+
 - Be smarter in choosing pairwise registration covariance (uncertainty)
   - Automatically determine covariance using properties of the sensor or the data
   - Use pairwise registration features to determine covariance
