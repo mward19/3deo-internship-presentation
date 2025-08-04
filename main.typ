@@ -630,8 +630,8 @@ For each 100-frame pixel hitmap average, fit Gaussian parameters with:
 
 == References
 #block()[
-  #set text(size: 19pt)
-  #set list(spacing: 14pt)
+  #set text(size: 18pt)
+  #set list(spacing: 12pt)
   #set par(leading: 10pt)
   #grid(
     [
@@ -651,13 +651,14 @@ For each 100-frame pixel hitmap average, fit Gaussian parameters with:
       - #link("https://robotics.caltech.edu/~jerma/research_papers/scan_matching_papers/milios_globally_consistent.pdf")[Lu and Milios paper] #text(gray, size: 12pt)["Globally Consistent Range Scan Alignment for Environment Mapping", April 1997. Introduces these ideas in the context of robotics]
       - #link("https://bitbucket.org/3deo/zreg_ncc/commits/2b6d0d4d201a815ffae8883256b333029eb7dc45#comment-17902146")[Old optimizer] #text(gray, size: 12pt)[Replaced by Lu-Milios in zreg_ncc commit 2b6d0d4 on July 18th]
       - #link("https://bitbucket.org/3deo/zreg_ncc/src/master/python/lu_milios.py")[Lu-Milios implementation] #text(gray, size: 12pt)[zreg_ncc, python/lu_milios.py]
+      - #link("https://discourse.pymc.io/t/truncated-multivariate-normal-likelihood/17032")[PyMC forum discussion] #text(gray, size: 12pt)[I asked about using Bayesian inference---necessary tools not implemented]
     ],
     [
       *Modeling the Laser Illumination Spot*
     ],
     [
       - #link("references/illumination_spot_modeling.pdf")[Write-up] #text(gray, size: 12pt)[Describes background and my work thus far on this]
-      - #link("https://discourse.pymc.io/t/truncated-multivariate-normal-likelihood/17032")[PyMC forum discussion] #text(gray, size: 12pt)[I asked about using Bayesian inference---necessary tools not implemented]
+      - #link("https://bitbucket.org/3deo/laser_illumination_spot/src/master/")[laser_illumination_spot (master) on Bitbucket] #text(gray, size: 12pt)[Work in progress]
     ],
     columns: (40%, auto),
     align: (left + top, left + horizon),
